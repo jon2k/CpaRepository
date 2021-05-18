@@ -21,12 +21,13 @@ namespace CpaRepository.Controllers
             _logger = logger;
         }
         // GET: SiemensController1
-        public ActionResult VendorModule(int i)
+        public ActionResult VendorModule(int id)
         {
-            int selectedIndex = 1;
-            SelectList states = new SelectList(_db.Vendors, "Id", "Name", selectedIndex);
-            ViewBag.States = states;
-            var model = _db.VendorModules.Where(n => n.VendorId == i).ToList();
+            
+            int selectedIndex = id==0 ? 1 : id;
+            IEnumerable<Vendor> vendors = _db.Vendors.ToList();
+            ViewBag.data = vendors;
+            var model = _db.VendorModules.Where(n => n.VendorId == selectedIndex).ToList();
             return View(model);
         }
 
