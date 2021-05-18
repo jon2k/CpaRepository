@@ -61,23 +61,32 @@ namespace CpaRepository.Controllers
         // GET: SiemensController1/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var model=_db.VendorModules.Where(n => n.Id == id).FirstOrDefault();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Edit(VendorModule module)
+        {
+            _db.Entry(module).State=Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _db.SaveChanges();
+            var model = _db.VendorModules.Where(n => n.Id == module.VendorId).ToList();
+            return View(model);
         }
 
         // POST: SiemensController1/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         // GET: SiemensController1/Delete/5
         public ActionResult Delete(int id)
