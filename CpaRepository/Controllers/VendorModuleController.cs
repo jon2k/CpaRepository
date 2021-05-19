@@ -20,7 +20,7 @@ namespace CpaRepository.Controllers
             _db = context;
             _logger = logger;
         }
-        // GET: SiemensController1
+        // GET: VendorModuleController/VendorModule
         public ActionResult VendorModule(int id)
         {
             
@@ -33,7 +33,7 @@ namespace CpaRepository.Controllers
             return View(model);
         }
 
-        // GET: SiemensController1/Details/5
+        // GET: VendorModuleController/Details/5
         public ActionResult Details(int id)
         {
             return View();
@@ -47,7 +47,7 @@ namespace CpaRepository.Controllers
             return View();
         }
 
-        // POST: SiemensController1/Create
+        // POST: VendorModuleController/Create
         [HttpPost]
        // [ValidateAntiForgeryToken]
         public ActionResult Create(VendorModule module)
@@ -69,8 +69,10 @@ namespace CpaRepository.Controllers
 
         public ActionResult Edit(int? id)
         {
-         
+            
             var model=_db.VendorModules.Where(n => n.Id == id).FirstOrDefault();
+            ViewData["Vendor"] = _db.Vendors.Where(n => n.Id == model.VendorId).FirstOrDefault().Name;
+           
             return View(model);
         }
 
@@ -89,14 +91,15 @@ namespace CpaRepository.Controllers
             }
         }      
 
-        // GET: SiemensController1/Delete/5
+        // GET: VendorModuleController/Delete/5
         public ActionResult Delete(int id)
         {
            var module= _db.VendorModules.Where(n => n.Id == id).FirstOrDefault();
+            ViewData["Vendor"] = _db.Vendors.Where(n => n.Id == module.VendorId).FirstOrDefault().Name;
             return View(module);
         }
 
-        // POST: SiemensController1/Delete/5
+        // POST: VendorModuleController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
