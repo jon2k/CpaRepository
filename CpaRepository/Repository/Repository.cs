@@ -1,4 +1,6 @@
 ﻿using CpaRepository.EF;
+using CpaRepository.ModelsDb;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,20 +8,22 @@ using System.Threading.Tasks;
 
 namespace CpaRepository.Repository
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, new()
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : EntityBase, new()
     {
-        protected readonly ApplicationContext Context;
+        protected readonly ApplicationContext _db;
+        protected DbSet<TEntity> _dbSet;
 
         public Repository(ApplicationContext customerContext)
         {
-            Context = customerContext;
+            _db = customerContext;
+            _dbSet= _db.Set<TEntity>();
         }
 
         public IEnumerable<TEntity> GetAll()
         {
             try
             {
-                return Context.Set<TEntity>();
+                return _db.Set<TEntity>();
             }
             catch (Exception ex)
             {
@@ -36,8 +40,8 @@ namespace CpaRepository.Repository
 
             try
             {
-                await Context.AddAsync(entity);
-                await Context.SaveChangesAsync();
+                await _db.AddAsync(entity);
+                await _db.SaveChangesAsync();
 
                 return entity;
             }
@@ -51,13 +55,13 @@ namespace CpaRepository.Repository
         {
             if (entity == null)
             {
-                throw new ArgumentNullException($"{nameof(AddAsync)} entity must not be null");
+                throw new ArgumentNullException($"{nameof(UpdateAsync)} entity must not be null");
             }
 
             try
             {
-                Context.Update(entity);
-                await Context.SaveChangesAsync();
+                _db.Update(entity);
+                await _db.SaveChangesAsync();
 
                 return entity;
             }
@@ -65,6 +69,28 @@ namespace CpaRepository.Repository
             {
                 throw new Exception($"{nameof(entity)} could not be updated {ex.Message}");
             }
+        }
+
+        public async Task DeleteAsync(TEntity entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException($"{nameof(DeleteAsync)} entity must not be null");
+            }
+            try
+            {
+                _db.Remove(entity);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{nameof(entity)} could not be deleted {ex.Message}");
+            }
+        }
+
+        public TEntity GetById(int id)
+        {
+            return _dbSet.Find(id);
         }
     }
 

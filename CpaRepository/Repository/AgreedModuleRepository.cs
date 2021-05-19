@@ -21,7 +21,7 @@ namespace CpaRepository.Repository
                 throw new ArgumentNullException($"{nameof(GetModuleForPeriod)} entity must not be null");
             else
             {
-                var result = Context.AgreedModules.Where(v => v.VendorModule.Vendor.Equals(vendor))
+                var result = _db.AgreedModules.Where(v => v.VendorModule.Vendor.Equals(vendor))
                     .GroupBy(m => m.VendorModule)
                     //.Select(n => new { dd = n.Key, ww = n.OrderBy(o => o.DateOfAgreement).FirstOrDefault() });
                     .Select(group => new { name = group.Key, All = group.OrderByDescending(x => x.DateOfAgreement) })
@@ -45,7 +45,7 @@ namespace CpaRepository.Repository
             else if (dateStart <= dateStop)
                 throw new Exception($"{nameof(GetModuleForPeriod)} incorrect dates");
             else
-                return Context.AgreedModules.Where(n => n.VendorModule.Vendor.Equals(vendor))
+                return _db.AgreedModules.Where(n => n.VendorModule.Vendor.Equals(vendor))
                     .Where(d => d.DateOfAgreement >= dateStart && d.DateOfAgreement <= dateStop);
         }
     }

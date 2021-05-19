@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Добавить модуль @ViewData["Vendor"]</h1>
+<h1>Добавить модуль @ViewBag.Vendor</h1>
 
 <h4>VendorModule</h4>
 <hr />
@@ -12,10 +12,10 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <!--<div class="form-group" type="hidden">
+            <div class="form-group" type="hidden">
         <label asp-for="VendorId" type="hidden" class="control-label"></label>
         <input asp-for="VendorId" type="hidden" class ="form-control" value="@ViewBag.VendorId"/>
-    </div>-->
+    </div>
             <div class="form-group">
                 <label asp-for="NameModule" class="control-label"></label>
                 <input asp-for="NameModule" class="form-control" />
