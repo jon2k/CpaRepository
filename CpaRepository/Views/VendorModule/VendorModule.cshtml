@@ -4,7 +4,7 @@
     ViewData["Title"] = "View";
 }
 
-<h1>Изменение описания вендорного модуля</h1>
+<h1>Модули @ViewBag.NameVendor</h1>
 
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
         aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +28,7 @@
 
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-route-id="@ViewBag.IdVendor">Create New</a>
 </p>
 <table class="table">
     <thead>

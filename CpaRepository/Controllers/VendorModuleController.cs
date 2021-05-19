@@ -27,6 +27,8 @@ namespace CpaRepository.Controllers
             int selectedIndex = id==0 ? 1 : id;
             IEnumerable<Vendor> vendors = _db.Vendors.ToList();
             ViewBag.data = vendors;
+            ViewBag.IdVendor = selectedIndex;
+            ViewBag.NameVendor = _db.Vendors.Where(n => n.Id == selectedIndex).FirstOrDefault().Name;
             var model = _db.VendorModules.Where(n => n.VendorId == selectedIndex).ToList();
             return View(model);
         }
@@ -37,20 +39,27 @@ namespace CpaRepository.Controllers
             return View();
         }
 
-        // GET: SiemensController1/Create
-        public ActionResult Create()
+        // GET: VendorModuleController/Create
+        public ActionResult Create(int id)
         {
+            ViewData["Vendor"] = _db.Vendors.Where(n => n.Id == id).FirstOrDefault().Name;
+            ViewBag.VendorId = id;
             return View();
         }
 
         // POST: SiemensController1/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+       // [ValidateAntiForgeryToken]
+        public ActionResult Create(VendorModule module)
         {
+            //ToDo костыль
+            module.Id = 0;    
+            _db.Add(module);
+            _db.SaveChanges();
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(VendorModule),new { id=module.VendorId});
             }
             catch
             {
@@ -58,50 +67,46 @@ namespace CpaRepository.Controllers
             }
         }
 
-        // GET: SiemensController1/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
+         
             var model=_db.VendorModules.Where(n => n.Id == id).FirstOrDefault();
             return View(model);
         }
+
         [HttpPost]
         public ActionResult Edit(VendorModule module)
-        {
-            _db.Entry(module).State=Microsoft.EntityFrameworkCore.EntityState.Modified;
+        {          
+            _db.VendorModules.Update(module);       
             _db.SaveChanges();
-            var model = _db.VendorModules.Where(n => n.Id == module.VendorId).ToList();
-            return View(model);
-        }
-
-        // POST: SiemensController1/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+            try
+            {
+                return RedirectToAction(nameof(VendorModule), new { id = module.VendorId });
+            }
+            catch
+            {
+                return View();
+            }
+        }      
 
         // GET: SiemensController1/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+           var module= _db.VendorModules.Where(n => n.Id == id).FirstOrDefault();
+            return View(module);
         }
 
         // POST: SiemensController1/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteConfirmed(int id)
         {
+            var module=_db.VendorModules.Find(id);
+            _db.VendorModules.Remove(module);
+            _db.SaveChanges();
             try
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(VendorModule), new { id = module.VendorId });
             }
             catch
             {
