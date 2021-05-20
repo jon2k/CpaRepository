@@ -1,33 +1,17 @@
-﻿@model CpaRepository.ModelsDb.VendorModule
+﻿@model CpaRepository.ModelsDb.CpaModule
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Добавить модуль @ViewBag.Vendor</h1>
+<h1>Create</h1>
 
-<h4>VendorModule</h4>
+<h4>CpaModule</h4>
 <hr />
-<!---->
-<select class="select" multiple>
-    <option value="1">One</option>
-    <option value="2">Two</option>
-    <option value="3">Three</option>
-    <option value="4">Four</option>
-    <option value="5">Five</option>
-    <option value="6">Six</option>
-    <option value="7">Seven</option>
-    <option value="8">Eight</option>
-</select>
-<!---->
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group" type="hidden">
-                <label asp-for="VendorId" type="hidden" class="control-label"></label>
-                <input asp-for="VendorId" type="hidden" class="form-control" value="@ViewBag.VendorId" />
-            </div>
             <div class="form-group">
                 <label asp-for="NameModule" class="control-label"></label>
                 <input asp-for="NameModule" class="form-control" />
@@ -35,11 +19,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />              
+                <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-
-
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -51,6 +33,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

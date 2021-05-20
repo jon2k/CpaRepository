@@ -31,7 +31,7 @@ namespace CpaRepository
             services.AddControllersWithViews();
             services.AddScoped<VendorModuleRepo>();
             services.AddScoped<Repository<Vendor>>();
-
+            services.AddScoped<Repository<CpaModule>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

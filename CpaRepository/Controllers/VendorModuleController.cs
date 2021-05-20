@@ -14,9 +14,9 @@ namespace CpaRepository.Controllers
 {
     public class VendorModuleController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<VendorModuleController> _logger;
         private VendorModuleRepo _repo;
-        public VendorModuleController(VendorModuleRepo context, ILogger<HomeController> logger)
+        public VendorModuleController(VendorModuleRepo context, ILogger<VendorModuleController> logger)
         {
             _repo = context;
             _logger = logger;
