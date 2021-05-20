@@ -1,4 +1,5 @@
 using CpaRepository.EF;
+using CpaRepository.ModelsDb;
 using CpaRepository.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,7 +30,8 @@ namespace CpaRepository
             services.AddDbContext<ApplicationContext>(options => options.UseSqlite("Filename=Cpa.db"));
             services.AddControllersWithViews();
             services.AddScoped<VendorModuleRepo>();
-                  
+            services.AddScoped<Repository<Vendor>>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

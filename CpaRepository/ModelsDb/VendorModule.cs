@@ -16,7 +16,8 @@ namespace CpaRepository.ModelsDb
 
         public string Description { get; set; }
         public List<AgreedModule> AgreedModules { get; set; }
-        public List<RelationCpaModuleWithVendorModule> Relations { get; set; }
+        public List<CpaModule> CpaModules { get; set; }
+       // public List<RelationCpaModuleWithVendorModule> Relations { get; set; }
     }
 
 }

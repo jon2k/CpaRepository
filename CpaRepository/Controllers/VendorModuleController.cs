@@ -15,23 +15,23 @@ namespace CpaRepository.Controllers
     public class VendorModuleController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private VendorModuleRepo _db;
+        private VendorModuleRepo _repo;
         public VendorModuleController(VendorModuleRepo context, ILogger<HomeController> logger)
         {
-            _db = context;
+            _repo = context;
             _logger = logger;
         }
-        // GET: VendorModuleController/VendorModule
+
         public ActionResult VendorModule(int id)
         {
             try
             {
                 if (id == 0) id = 1;
-                IEnumerable<Vendor> vendors = _db.GetAllVendors();
+                IEnumerable<Vendor> vendors = _repo.GetAllVendors();
                 ViewBag.data = vendors;
                 ViewBag.IdVendor = id;
-                ViewBag.NameVendor = _db.GetNameVendor(id);
-                var model = _db.GetVendorModulesOneVendor(id);
+                ViewBag.NameVendor = _repo.GetNameVendor(id);
+                var model = _repo.GetVendorModulesOneVendor(id);
                 return View(model);
             }
             catch(Exception e)
@@ -45,7 +45,7 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                ViewBag.Vendor = _db.GetNameVendor(id);
+                ViewBag.Vendor = _repo.GetNameVendor(id);
                 ViewBag.VendorId = id;
                 return View();
             }
@@ -64,7 +64,7 @@ namespace CpaRepository.Controllers
             module.Id = 0;               
             try
             {
-                await _db.AddAsync(module);
+                await _repo.AddAsync(module);
                 return RedirectToAction(nameof(VendorModule),new { id=module.VendorId});
             }
             catch(Exception e)
@@ -78,8 +78,8 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                var model = _db.GetById(id);
-                ViewBag.Vendor = _db.GetNameVendor(model.VendorId);
+                var model = _repo.GetById(id);
+                ViewBag.Vendor = _repo.GetNameVendor(model.VendorId);
 
                 return View(model);
             }
@@ -95,7 +95,7 @@ namespace CpaRepository.Controllers
         {          
             try
             {
-                await _db.UpdateAsync(module);
+                await _repo.UpdateAsync(module);
                 return RedirectToAction(nameof(VendorModule), new { id = module.VendorId });
             }
             catch(Exception e)
@@ -109,8 +109,8 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                var module = _db.GetById(id);
-                ViewBag.Vendor = _db.GetNameVendor(module.VendorId);
+                var module = _repo.GetById(id);
+                ViewBag.Vendor = _repo.GetNameVendor(module.VendorId);
                 return View(module);
             }
             catch (Exception e)
@@ -126,8 +126,8 @@ namespace CpaRepository.Controllers
         {                     
             try
             {
-                var module = _db.GetById(id);
-                await _db.DeleteAsync(module);
+                var module = _repo.GetById(id);
+                await _repo.DeleteAsync(module);
                 return RedirectToAction(nameof(VendorModule), new { id = module.VendorId });
             }
             catch(Exception e)

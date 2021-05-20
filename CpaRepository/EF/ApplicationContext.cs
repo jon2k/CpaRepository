@@ -18,7 +18,7 @@ namespace CpaRepository.EF
         {
             //Logger = logger;
             //Create DB, it it doesn't exist
-           // Database.EnsureDeleted();
+            // Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,8 +30,8 @@ namespace CpaRepository.EF
 
         public DbSet<AgreedModule> AgreedModules { get; set; }
         public DbSet<CpaModule> CpaModules { get; set; }
-        public DbSet<CpaSubModule> CpaSubModules { get; set; }
-        public DbSet<RelationCpaModuleWithVendorModule> RelationCpaModuleWithVendorModules { get; set; }
+        //public DbSet<CpaSubModule> CpaSubModules { get; set; }
+        //public DbSet<RelationCpaModuleWithVendorModule> RelationCpaModuleWithVendorModules { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<VendorModule> VendorModules { get; set; }
 
@@ -47,18 +47,18 @@ namespace CpaRepository.EF
                 entity.HasOne(a => a.VendorModule)
                     .WithMany(v => v.AgreedModules);
             });
-            modelBuilder.Entity<CpaSubModule>(entity =>
-            {
-                entity.HasOne(s => s.Module)
-                    .WithMany(m => m.CpaSubModules);
-            });
-            modelBuilder.Entity<RelationCpaModuleWithVendorModule>(entity =>
-            {
-                entity.HasOne(r => r.CpaSubModule)
-                    .WithMany(m => m.Relations);
-                entity.HasOne(r => r.VendorModule)
-                    .WithMany(m => m.Relations);
-            });
+            //modelBuilder.Entity<CpaSubModule>(entity =>
+            //{
+            //    entity.HasOne(s => s.Module)
+            //        .WithMany(m => m.CpaSubModules);
+            //});
+            //modelBuilder.Entity<RelationCpaModuleWithVendorModule>(entity =>
+            //{
+            //    entity.HasOne(r => r.CpaSubModule)
+            //        .WithMany(m => m.Relations);
+            //    entity.HasOne(r => r.VendorModule);
+            //        .WithMany(m => m.Relations);
+            //});
             modelBuilder.Entity<VendorModule>(entity =>
             {
                 entity.HasOne(v => v.Vendor)
@@ -77,19 +77,32 @@ namespace CpaRepository.EF
                 new CpaModule[]
                 {
                     new CpaModule{Id=1,NameModule="OIP", Description=""},
-                    new CpaModule{Id=2,NameModule="NA", Description=""},
-                    new CpaModule{Id=3,NameModule="MPT", Description=""},
+                    new CpaModule{Id=2,NameModule="KTPR", Description=""},
+                    new CpaModule{Id=3,NameModule="KTPRAS", Description=""},
+                    new CpaModule{Id=4,NameModule="KTPRA", Description=""},
+                    new CpaModule{Id=5,NameModule="KTPRS", Description=""},
+                    new CpaModule{Id=6,NameModule="CMNA", Description=""},
+                    new CpaModule{Id=7,NameModule="UMPNA", Description=""},
+                    new CpaModule{Id=8,NameModule="KRMPN", Description=""},
+                    new CpaModule{Id=9,NameModule="KGMPNA", Description=""},
+                    new CpaModule{Id=10,NameModule="UVS", Description=""},
+                    new CpaModule{Id=11,NameModule="UZD", Description=""},
+                    new CpaModule{Id=12,NameModule="MZD1", Description=""},
+                    new CpaModule{Id=13,NameModule="UTS", Description=""},
+                    new CpaModule{Id=14,NameModule="MPT", Description=""},
+                    new CpaModule{Id=15,NameModule="SAR заслонка", Description=""},
+                    new CpaModule{Id=16,NameModule="SAR ЧРП", Description=""},
                 });
-            modelBuilder.Entity<CpaSubModule>().HasData(
-              new CpaSubModule[]
-              {
-                    new CpaSubModule{Id=1, ModuleId=1, NameSubModule="OipElectric", Description=""},
-                    new CpaSubModule{Id=2, ModuleId=1, NameSubModule="OipVibration", Description=""},
-                    new CpaSubModule{Id=3, ModuleId=1, NameSubModule="ProcLevels", Description=""},
-                    new CpaSubModule{Id=4, ModuleId=1, NameSubModule="TankSpeed", Description=""},
-                    new CpaSubModule{Id=5, ModuleId=2, NameSubModule="Umpna", Description=""},
-                    new CpaSubModule{Id=6, ModuleId=2, NameSubModule="Cmna", Description=""},
-              });
+            //modelBuilder.Entity<CpaSubModule>().HasData(
+            //  new CpaSubModule[]
+            //  {
+            //        new CpaSubModule{Id=1, ModuleId=1, NameSubModule="OipElectric", Description=""},
+            //        new CpaSubModule{Id=2, ModuleId=1, NameSubModule="OipVibration", Description=""},
+            //        new CpaSubModule{Id=3, ModuleId=1, NameSubModule="ProcLevels", Description=""},
+            //        new CpaSubModule{Id=4, ModuleId=1, NameSubModule="TankSpeed", Description=""},
+            //        new CpaSubModule{Id=5, ModuleId=2, NameSubModule="Umpna", Description=""},
+            //        new CpaSubModule{Id=6, ModuleId=2, NameSubModule="Cmna", Description=""},
+            //  });
             modelBuilder.Entity<VendorModule>().HasData(
              new VendorModule[]
              {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CpaRepository.ModelsDb
 {
-    public class CpaSubModule : EntityBase
+    /*public class CpaSubModule : EntityBase
     {
         public int ModuleId { get; set; }
         [Required]
@@ -16,6 +16,6 @@ namespace CpaRepository.ModelsDb
         [Required]
         public string Description { get; set; }
         public List<RelationCpaModuleWithVendorModule> Relations { get; set; }
-    }
+    }*/
 
 }
