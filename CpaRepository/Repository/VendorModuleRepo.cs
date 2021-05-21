@@ -14,6 +14,11 @@ namespace CpaRepository.Repository
 
         }
 
+        public IEnumerable<CpaModule> GetAllCpaModules()
+        {
+            return _db.CpaModules.ToList();
+        }
+
         public IEnumerable<Vendor> GetAllVendors()
         {
             return _db.Vendors.ToList();

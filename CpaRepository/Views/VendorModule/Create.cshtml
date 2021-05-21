@@ -1,4 +1,4 @@
-﻿@model CpaRepository.ModelsDb.VendorModule
+﻿@model CpaRepository.ViewModel.VendorModule.VendorModuleViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -8,18 +8,10 @@
 
 <h4>VendorModule</h4>
 <hr />
-<!---->
-<select class="select" multiple>
-    <option value="1">One</option>
-    <option value="2">Two</option>
-    <option value="3">Three</option>
-    <option value="4">Four</option>
-    <option value="5">Five</option>
-    <option value="6">Six</option>
-    <option value="7">Seven</option>
-    <option value="8">Eight</option>
-</select>
-<!---->
+<select asp-for="CpaModuleId" asp-items="@Model.CpaModules">
+    <option>Please select</option>
+    </select>
+<select multiple asp-for="CpaModulesId" asp-items="@Model.CpaModules" class="custom-select"></select>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -35,8 +27,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />              
+                <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CpaModulesId" class="control-label"></label>
+                <select multiple asp-for="CpaModulesId" asp-items="@Model.CpaModules" class="custom-select"></select>
+                <span asp-validation-for="CpaModulesId" class="text-danger"></span>
             </div>
 
 

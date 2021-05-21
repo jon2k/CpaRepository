@@ -11,5 +11,7 @@ namespace CpaRepository.Repository
         IEnumerable<Vendor> GetAllVendors();
         string GetNameVendor(int id);
         IEnumerable<VendorModule> GetVendorModulesOneVendor(int id);
+        IEnumerable<CpaModule> GetAllCpaModules();
+
     }
 }

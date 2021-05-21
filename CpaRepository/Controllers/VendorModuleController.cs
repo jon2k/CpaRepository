@@ -1,6 +1,7 @@
 ﻿using CpaRepository.EF;
 using CpaRepository.ModelsDb;
 using CpaRepository.Repository;
+using CpaRepository.ViewModel.VendorModule;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -47,7 +48,14 @@ namespace CpaRepository.Controllers
             {
                 ViewBag.Vendor = _repo.GetNameVendor(id);
                 ViewBag.VendorId = id;
-                return View();
+                // ViewBag.CpaModules = new SelectList(_repo.GetAllCpaModules(),"Id", "NameModule");
+                var modules = _repo.GetAllCpaModules().ToList();
+                 var cpaModule = modules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
+                // ViewBag.CpaModules = new List<SelectListItem> ( cpaModule);
+                 var vendorModule = new VendorModuleViewModel() { CpaModules = cpaModule, CpaModulesId=modules.Select(n=>n.Id).ToArray() };
+               // SelectList cities = new SelectList(_repo.GetAllCpaModules().ToList(), "Id", "NameModule");
+               // ViewBag.CpaModules = cities;
+                return View(vendorModule);
             }
             catch (Exception e)
             {
@@ -58,13 +66,14 @@ namespace CpaRepository.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(VendorModule module)
+        public async Task<ActionResult> Create(VendorModuleViewModel module)
         {
             //ToDo костыль
-            module.Id = 0;               
+            // module.Id = 0;               
+            var rr = module;
             try
             {
-                await _repo.AddAsync(module);
+              //  await _repo.AddAsync(module);
                 return RedirectToAction(nameof(VendorModule),new { id=module.VendorId});
             }
             catch(Exception e)
