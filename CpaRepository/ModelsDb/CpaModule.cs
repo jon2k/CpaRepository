@@ -12,7 +12,7 @@ namespace CpaRepository.ModelsDb
         public string NameModule { get; set; }
         public string Description { get; set; }
        // public List<CpaSubModule> CpaSubModules { get; set; }
-        public List<VendorModule> VendorModules { get; set; }
+        public virtual List<VendorModule> VendorModules { get; set; }
     }
 
 }

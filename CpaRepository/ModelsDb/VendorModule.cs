@@ -10,13 +10,14 @@ namespace CpaRepository.ModelsDb
     {
         public int VendorId { get; set; }
         [Required]
-        public Vendor Vendor { get; set; }
+        public virtual Vendor Vendor { get; set; }
         [Required]
         public string NameModule { get; set; }
 
         public string Description { get; set; }
-        public List<AgreedModule> AgreedModules { get; set; }
-        public List<CpaModule> CpaModules { get; set; }
+        public virtual List<AgreedModule> AgreedModules { get; set; }
+       // public int[] CpaModulesId { get; set; }
+        public virtual List<CpaModule> CpaModules { get; set; }
        // public List<RelationCpaModuleWithVendorModule> Relations { get; set; }
     }
 

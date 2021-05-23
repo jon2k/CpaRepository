@@ -6,7 +6,7 @@
 
 <h1>Модули @ViewBag.NameVendor</h1>
 
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+<!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
         aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
 </button>
@@ -24,7 +24,7 @@
 
 
     </ul>
-</div>
+</div>-->
 
 
 
@@ -44,9 +44,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <!--<th>
-                @Html.DisplayNameFor(model => model.Timestamp)
-            </th>-->
+            <th>
+                @Html.DisplayNameFor(model => model.CpaModules)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -63,9 +63,18 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
-                <!---<td>
-                    @Html.DisplayFor(modelItem => item.Timestamp)
-                </td>-->
+                <td>
+                    @for (int i = 0; i < item.CpaModules.Count; i++)
+                    {
+                        @Html.DisplayFor(modelItem => item.CpaModules[i].NameModule)
+                        if (item.CpaModules.Count > 1 && i < item.CpaModules.Count - 1)
+                        {
+                            <a>, </a>
+                        }
+                    }
+
+
+                </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <!--<a asp-action="Details" asp-route-id="@item.Id">Details</a> |-->

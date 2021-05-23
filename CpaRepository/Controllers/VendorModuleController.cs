@@ -47,14 +47,12 @@ namespace CpaRepository.Controllers
             try
             {
                 ViewBag.Vendor = _repo.GetNameVendor(id);
-                ViewBag.VendorId = id;
-                // ViewBag.CpaModules = new SelectList(_repo.GetAllCpaModules(),"Id", "NameModule");
+                ViewBag.VendorId = id;         
                 var modules = _repo.GetAllCpaModules().ToList();
-                 var cpaModule = modules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
-                // ViewBag.CpaModules = new List<SelectListItem> ( cpaModule);
-                 var vendorModule = new VendorModuleViewModel() { CpaModules = cpaModule, CpaModulesId=modules.Select(n=>n.Id).ToArray() };
-               // SelectList cities = new SelectList(_repo.GetAllCpaModules().ToList(), "Id", "NameModule");
-               // ViewBag.CpaModules = cities;
+                var cpaModule = modules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();          
+                var vendorModule = new VendorModuleViewModel() {
+                    CpaModules = cpaModule, 
+                    CpaModulesId=modules.Select(n=>n.Id).ToArray() };           
                 return View(vendorModule);
             }
             catch (Exception e)
@@ -70,10 +68,19 @@ namespace CpaRepository.Controllers
         {
             //ToDo костыль
             // module.Id = 0;               
-            var rr = module;
+            
             try
             {
-              //  await _repo.AddAsync(module);
+                var cpaModules = _repo.GetAllCpaModules().Where(p => module.CpaModulesId.Any(l => p.Id == l)).ToList();
+                var newVendorModule = new VendorModule()
+                {
+                    NameModule = module.NameModule,
+                    Description=module.Description,
+                    CpaModules=cpaModules, 
+                    VendorId=module.VendorId
+                    
+                };
+                await _repo.AddAsync(newVendorModule);
                 return RedirectToAction(nameof(VendorModule),new { id=module.VendorId});
             }
             catch(Exception e)
@@ -88,9 +95,19 @@ namespace CpaRepository.Controllers
             try
             {
                 var model = _repo.GetById(id);
+                var modules = _repo.GetAllCpaModules().ToList();
+                var cpaModule = modules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
                 ViewBag.Vendor = _repo.GetNameVendor(model.VendorId);
+                var vm = new VendorModuleViewModel
+                {
+                    Id = model.Id,
+                    CpaModulesId = modules.Select(n => n.Id).ToArray(),
+                    CpaModules=cpaModule,
+                    NameModule = model.NameModule,
+                    Description = model.Description
+                };
 
-                return View(model);
+                return View(vm);
             }
             catch(Exception e)
             {
@@ -100,11 +117,19 @@ namespace CpaRepository.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(VendorModule module)
+        public async Task<ActionResult> Edit(VendorModuleViewModel module)
         {          
             try
             {
-                await _repo.UpdateAsync(module);
+                var cpaModules = _repo.GetAllCpaModules().Where(p => module.CpaModulesId.Any(l => p.Id == l)).ToList();
+                var vendoeModule = new VendorModule
+                {
+                    Id = module.Id,
+                    CpaModules = cpaModules,
+                    NameModule = module.NameModule,
+                    Description = module.Description
+                };
+                await _repo.UpdateAsync(vendoeModule);
                 return RedirectToAction(nameof(VendorModule), new { id = module.VendorId });
             }
             catch(Exception e)

@@ -11,7 +11,7 @@ namespace CpaRepository.ModelsDb
         [Required]
         public string Name { get; set; }
         public string Describtion { get; set; }
-        public List<VendorModule> VendorModules { get; set; }
+        public virtual List<VendorModule> VendorModules { get; set; }
 
         public override bool Equals(object obj)
         {

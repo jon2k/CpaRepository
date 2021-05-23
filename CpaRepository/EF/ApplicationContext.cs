@@ -18,14 +18,15 @@ namespace CpaRepository.EF
         {
             //Logger = logger;
             //Create DB, it it doesn't exist
-            // Database.EnsureDeleted();
+           // Database.EnsureDeleted();
             Database.EnsureCreated();
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    //Use provider to MSSQL
-        //    optionsBuilder.UseSqlite("Filename=Cpa.db");
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //Use provider to MSSQL
+            // optionsBuilder.UseSqlite("Filename=Cpa.db");
+            optionsBuilder.UseLazyLoadingProxies();
+        }
 
 
         public DbSet<AgreedModule> AgreedModules { get; set; }
@@ -73,8 +74,7 @@ namespace CpaRepository.EF
                     new Vendor { Id=4, Name="B+R"},
                     new Vendor { Id=5, Name="Shneider Electric"},
                 });
-            modelBuilder.Entity<CpaModule>().HasData(
-                new CpaModule[]
+            var cpaModules = new CpaModule[]
                 {
                     new CpaModule{Id=1,NameModule="OIP", Description=""},
                     new CpaModule{Id=2,NameModule="KTPR", Description=""},
@@ -92,7 +92,10 @@ namespace CpaRepository.EF
                     new CpaModule{Id=14,NameModule="MPT", Description=""},
                     new CpaModule{Id=15,NameModule="SAR заслонка", Description=""},
                     new CpaModule{Id=16,NameModule="SAR ЧРП", Description=""},
-                });
+                    new CpaModule{Id=17,NameModule="Other", Description=""},
+                };
+            modelBuilder.Entity<CpaModule>().HasData(
+                cpaModules);
             //modelBuilder.Entity<CpaSubModule>().HasData(
             //  new CpaSubModule[]
             //  {
@@ -106,12 +109,13 @@ namespace CpaRepository.EF
             modelBuilder.Entity<VendorModule>().HasData(
              new VendorModule[]
              {
-                    new VendorModule{Id=1, VendorId=1, NameModule="OipLib", Description=""},
-                    new VendorModule{Id=2, VendorId=1, NameModule="NaLib", Description=""},
-                    new VendorModule{Id=3, VendorId=1, NameModule="MptLib", Description=""},
+                    new VendorModule{Id=1, VendorId=1, NameModule="OipLib", Description="",   },
+                    new VendorModule{Id=2, VendorId=1, NameModule="NaLib", Description="",  },
+                    new VendorModule{Id=3, VendorId=1, NameModule="MptLib", Description="" },
                     new VendorModule{Id=4, VendorId=1, NameModule="Tools", Description=""},
                     new VendorModule{Id=5, VendorId=2, NameModule="Oip", Description=""},
-                    new VendorModule{Id=6, VendorId=2, NameModule="Na", Description=""},
+                    new VendorModule{Id=6, VendorId=2, NameModule="Na", Description="" }
+
              });
         }
     }

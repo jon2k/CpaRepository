@@ -8,6 +8,7 @@ namespace CpaRepository.ViewModel.VendorModule
 {
     public class VendorModuleViewModel
     {
+        public int Id { get; set; }
         public int VendorId { get; set; }     
         public string NameModule { get; set; }
         public string Description { get; set; }

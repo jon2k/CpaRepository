@@ -13,7 +13,7 @@ namespace CpaRepository.ModelsDb
         //public Vendor Vendor { get; set; }
         public int VendorModuleId { get; set; }
         [Required]
-        public VendorModule VendorModule { get; set; }
+        public virtual VendorModule VendorModule { get; set; }
         [Required]
         public string CRC { get; set; }
         [Required]
