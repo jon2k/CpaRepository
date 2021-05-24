@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CpaRepository.ModelsDb;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace CpaRepository.ModelsDb
+namespace CpaRepository.ViewModel.AgreedModules
 {
-    public class AgreedModule : EntityBase
+    public class AgreedModuleViewModel
     {
-        //public int VendorId { get; set; }
-        //[Required]
-        //public Vendor Vendor { get; set; }
+        public int Id { get; set; }
+        [Required(ErrorMessage ="Не указан вендор")]
+        public int VendorId { get; set; }
+        [Required]
+        public virtual Vendor Vendor { get; set; }
+        [Required(ErrorMessage = "Не указан вендоргый модуль")]
         public int VendorModuleId { get; set; }
         [Required]
-        public virtual VendorModule VendorModule { get; set; }
+        public virtual CpaRepository.ModelsDb.VendorModule VendorModule { get; set; }
         [Required(ErrorMessage = "Не указана контрольная сумма")]
         public string CRC { get; set; }
         [Required(ErrorMessage = "Не указана версия")]
@@ -27,5 +28,4 @@ namespace CpaRepository.ModelsDb
         [Required(ErrorMessage = "Не указаны причины изменения модуля")]
         public string Changes { get; set; }
     }
-
 }

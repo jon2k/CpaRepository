@@ -23,8 +23,8 @@ namespace CpaRepository.Controllers
 
         public IActionResult Index()
         {
-            var res = _db.Vendors.ToList();
-            return View(res);
+           // var res = _db.Vendors.ToList();
+            return View();
         }
         public IActionResult AddModule()
         {

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CpaRepository.ViewModel.AgreedModules;
 
 namespace CpaRepository.EF
 {
@@ -18,7 +19,7 @@ namespace CpaRepository.EF
         {
             //Logger = logger;
             //Create DB, it it doesn't exist
-            //Database.EnsureDeleted();
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -118,6 +119,8 @@ namespace CpaRepository.EF
 
              });
         }
+
+        public DbSet<CpaRepository.ViewModel.AgreedModules.AgreedModuleViewModel> AgreedModuleViewModel { get; set; }
     }
 
 }

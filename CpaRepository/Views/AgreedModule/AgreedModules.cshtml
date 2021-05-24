@@ -1,0 +1,76 @@
+﻿@model IEnumerable<CpaRepository.ViewModel.AgreedModules.AgreedModuleViewModel>
+
+@{
+    ViewData["Title"] = "AgreedModules";
+}
+
+<h1>AgreedModules</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorModule)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CRC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Version)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfAgreement)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PatchVendorModule)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PatchLetter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Changes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vendor.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VendorModule.NameModule)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CRC)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Version)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfAgreement)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PatchVendorModule)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PatchLetter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Changes)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
