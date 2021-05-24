@@ -8,8 +8,9 @@ namespace CpaRepository.ModelsDb
 {
     public class Vendor : EntityBase
     {
-        [Required]
+        [Required(ErrorMessage = "Не указано имя")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Не указано описание")]
         public string Describtion { get; set; }
         public virtual List<VendorModule> VendorModules { get; set; }
 

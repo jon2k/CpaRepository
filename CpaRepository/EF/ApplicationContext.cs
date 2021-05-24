@@ -18,7 +18,7 @@ namespace CpaRepository.EF
         {
             //Logger = logger;
             //Create DB, it it doesn't exist
-           // Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -68,31 +68,31 @@ namespace CpaRepository.EF
             modelBuilder.Entity<Vendor>().HasData(
                 new Vendor[]
                 {
-                    new Vendor { Id=1, Name="Prosoft"},
-                    new Vendor { Id=2, Name="Emicon"},
-                    new Vendor { Id=3, Name="Siemens"},
-                    new Vendor { Id=4, Name="B+R"},
-                    new Vendor { Id=5, Name="Shneider Electric"},
+                    new Vendor { Id=1, Name="Prosoft", Describtion="тра-та-та"},
+                    new Vendor { Id=2, Name="Emicon", Describtion="тра-та-та"},
+                    new Vendor { Id=3, Name="Siemens", Describtion="тра-та-та"},
+                    new Vendor { Id=4, Name="B+R", Describtion="тра-та-та"},
+                    new Vendor { Id=5, Name="Shneider Electric", Describtion="тра-та-та"},
                 });
             var cpaModules = new CpaModule[]
                 {
-                    new CpaModule{Id=1,NameModule="OIP", Description=""},
-                    new CpaModule{Id=2,NameModule="KTPR", Description=""},
-                    new CpaModule{Id=3,NameModule="KTPRAS", Description=""},
-                    new CpaModule{Id=4,NameModule="KTPRA", Description=""},
-                    new CpaModule{Id=5,NameModule="KTPRS", Description=""},
-                    new CpaModule{Id=6,NameModule="CMNA", Description=""},
-                    new CpaModule{Id=7,NameModule="UMPNA", Description=""},
-                    new CpaModule{Id=8,NameModule="KRMPN", Description=""},
-                    new CpaModule{Id=9,NameModule="KGMPNA", Description=""},
-                    new CpaModule{Id=10,NameModule="UVS", Description=""},
-                    new CpaModule{Id=11,NameModule="UZD", Description=""},
-                    new CpaModule{Id=12,NameModule="MZD1", Description=""},
-                    new CpaModule{Id=13,NameModule="UTS", Description=""},
-                    new CpaModule{Id=14,NameModule="MPT", Description=""},
-                    new CpaModule{Id=15,NameModule="SAR заслонка", Description=""},
-                    new CpaModule{Id=16,NameModule="SAR ЧРП", Description=""},
-                    new CpaModule{Id=17,NameModule="Other", Description=""},
+                    new CpaModule{Id=1,NameModule="OIP", Description="Измеряемый параметр"},
+                    new CpaModule{Id=2,NameModule="KTPR", Description="тра-та-та"},
+                    new CpaModule{Id=3,NameModule="KTPRAS", Description="тра-та-та"},
+                    new CpaModule{Id=4,NameModule="KTPRA", Description="тра-та-та"},
+                    new CpaModule{Id=5,NameModule="KTPRS", Description="тра-та-та"},
+                    new CpaModule{Id=6,NameModule="CMNA", Description="тра-та-та"},
+                    new CpaModule{Id=7,NameModule="UMPNA", Description="тра-та-та"},
+                    new CpaModule{Id=8,NameModule="KRMPN", Description="тра-та-та"},
+                    new CpaModule{Id=9,NameModule="KGMPNA", Description="тра-та-та"},
+                    new CpaModule{Id=10,NameModule="UVS", Description="тра-та-та"},
+                    new CpaModule{Id=11,NameModule="UZD", Description="тра-та-та"},
+                    new CpaModule{Id=12,NameModule="MZD1", Description="тра-та-та"},
+                    new CpaModule{Id=13,NameModule="UTS", Description="тра-та-та"},
+                    new CpaModule{Id=14,NameModule="MPT", Description="тра-та-та"},
+                    new CpaModule{Id=15,NameModule="SAR заслонка", Description="тра-та-та"},
+                    new CpaModule{Id=16,NameModule="SAR ЧРП", Description="тра-та-та"},
+                    new CpaModule{Id=17,NameModule="Other", Description="тра-та-та"},
                 };
             modelBuilder.Entity<CpaModule>().HasData(
                 cpaModules);

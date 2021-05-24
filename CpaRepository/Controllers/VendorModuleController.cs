@@ -66,9 +66,6 @@ namespace CpaRepository.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(VendorModuleViewModel module)
         {
-            //ToDo костыль
-            // module.Id = 0;               
-            
             try
             {
                 var cpaModules = _repo.GetAllCpaModules().Where(p => module.CpaModulesId.Any(l => p.Id == l)).ToList();
@@ -122,20 +119,18 @@ namespace CpaRepository.Controllers
             try
             {
                 var cpaModules = _repo.GetAllCpaModules().Where(p => module.CpaModulesId.Any(l => p.Id == l)).ToList();
-                var vendoeModule = new VendorModule
-                {
-                    Id = module.Id,
-                    CpaModules = cpaModules,
-                    NameModule = module.NameModule,
-                    Description = module.Description
-                };
+                var vendoeModule = _repo.GetById(module.Id);
+                vendoeModule.CpaModules = cpaModules;
+                vendoeModule.NameModule = module.NameModule;
+                vendoeModule.Description = module.Description;
+                
                 await _repo.UpdateAsync(vendoeModule);
                 return RedirectToAction(nameof(VendorModule), new { id = module.VendorId });
             }
             catch(Exception e)
             {
                 _logger.LogError(e.Message);
-                return View();
+                return View(module.Id);
             }
         }      
 
