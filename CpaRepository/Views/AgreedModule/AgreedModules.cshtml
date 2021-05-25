@@ -55,7 +55,7 @@
                 @Html.DisplayFor(modelItem => item.Version)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateOfAgreement)
+                @Convert.ToDateTime(item.DateOfAgreement).ToString("dd/MM/yyyy")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PatchVendorModule)

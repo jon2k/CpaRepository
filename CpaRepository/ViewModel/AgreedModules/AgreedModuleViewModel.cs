@@ -9,11 +9,11 @@ namespace CpaRepository.ViewModel.AgreedModules
         public int Id { get; set; }
         [Required(ErrorMessage ="Не указан вендор")]
         public int VendorId { get; set; }
-        [Required]
+      //  [Required]
         public virtual Vendor Vendor { get; set; }
-        [Required(ErrorMessage = "Не указан вендоргый модуль")]
+        [Required(ErrorMessage = "Не указан вендорный модуль")]
         public int VendorModuleId { get; set; }
-        [Required]
+       // [Required]
         public virtual CpaRepository.ModelsDb.VendorModule VendorModule { get; set; }
         [Required(ErrorMessage = "Не указана контрольная сумма")]
         public string CRC { get; set; }

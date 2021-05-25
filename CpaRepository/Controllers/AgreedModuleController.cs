@@ -91,6 +91,61 @@ namespace CpaRepository.Controllers
                 return View();
             }
         }
+        public ActionResult Edit(int id)
+        {
+            try
+            {
+                var model = _repo.GetById(id);
+                var vendor = _repo.GetAllVendors();
+                //var modules = _repo.GetAllCpaModules().ToList();
+                //var cpaModule = modules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
+                ViewBag.VendorId = vendor.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Name }).ToList();
+                var vendorModules = _repo.GetVendorModulesOneVendor(model.VendorModule.VendorId);
+                ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
+                var vm = new AgreedModuleViewModel
+                {
+                    Id = model.Id,
+                    Changes=model.Changes,
+                    CRC=model.CRC,
+                    DateOfAgreement=model.DateOfAgreement,
+                    PatchLetter=model.PatchLetter,
+                    PatchVendorModule=model.PatchVendorModule,
+                    VendorId=model.VendorModule.VendorId,
+                    VendorModuleId=model.VendorModuleId,
+                    Version=model.Version
+                    
+                };
+
+                return View(vm);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return RedirectToAction(nameof(AgreedModule));
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(VendorModuleViewModel module)
+        {
+            try
+            {
+                var cpaModules = _repo.GetAllCpaModules().Where(p => module.CpaModulesId.Any(l => p.Id == l)).ToList();
+                var vendoeModule = _repo.GetById(module.Id);
+                //vendoeModule.CpaModules = cpaModules;
+                //vendoeModule.NameModule = module.NameModule;
+                //vendoeModule.Description = module.Description;
+
+                await _repo.UpdateAsync(vendoeModule);
+                return RedirectToAction(nameof(VendorModule), new { id = module.VendorId });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return View(module.Id);
+            }
+        }
+
         public ActionResult GetVendorModules(int id)
         {
             try
