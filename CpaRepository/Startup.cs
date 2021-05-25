@@ -30,6 +30,7 @@ namespace CpaRepository
             services.AddDbContext<ApplicationContext>(options => options.UseSqlite("Filename=Cpa.db"));
             services.AddControllersWithViews();
             services.AddScoped<VendorModuleRepo>();
+            services.AddScoped<AgreedModulesRepo>();
             services.AddScoped<Repository<Vendor>>();
             services.AddScoped<Repository<CpaModule>>();
             services.AddScoped<Repository<AgreedModule>>();
