@@ -3,12 +3,14 @@ using CpaRepository.ModelsDb;
 using CpaRepository.Repository;
 using CpaRepository.ViewModel.AgreedModules;
 using CpaRepository.ViewModel.VendorModule;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,7 +20,8 @@ namespace CpaRepository.Controllers
     {
         private readonly ILogger<VendorModuleController> _logger;
         private AgreedModulesRepo _repo;
-        public AgreedModuleController(AgreedModulesRepo context, ILogger<VendorModuleController> logger)
+        IWebHostEnvironment _appEnvironment;
+        public AgreedModuleController(AgreedModulesRepo context, ILogger<VendorModuleController> logger, IWebHostEnvironment appEnvironment)
         {
             _repo = context;
             _logger = logger;
@@ -56,7 +59,7 @@ namespace CpaRepository.Controllers
             {
                 var vendor = _repo.GetAllVendors();
                 ViewBag.VendorId = vendor.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Name }).ToList();
-                var vendorModules= _repo.GetVendorModulesOneVendor(vendor.FirstOrDefault().Id);
+                var vendorModules = _repo.GetVendorModulesOneVendor(vendor.FirstOrDefault().Id);
                 ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
                 return View();
             }
@@ -72,18 +75,32 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                var agreedModule = new AgreedModule()
+                if (module.File != null)
                 {
-                    VendorModuleId=module.VendorModuleId,
-                    Changes=module.Changes,
-                    CRC=module.CRC,
-                    PatchLetter=module.PatchLetter,
-                    DateOfAgreement=module.DateOfAgreement,
-                    PatchVendorModule=module.PatchVendorModule,
-                    Version=module.Version                 
-                };
-                  await _repo.AddAsync(agreedModule);
-                return RedirectToAction(nameof(AgreedModules));
+                    // путь к папке Files
+                    string path = "/Files/" + module.File.FileName;
+                    // сохраняем файл в папку Files в каталоге wwwroot
+                    using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                    {
+                        await module.File.CopyToAsync(fileStream);
+                    }
+                    // FileModel file = new FileModel { Name = uploadedFile.FileName, Path = path };
+
+
+                    var agreedModule = new AgreedModule()
+                    {
+                        VendorModuleId = module.VendorModuleId,
+                        Changes = module.Changes,
+                        CRC = module.CRC,
+                        PatchLetter = module.PatchLetter,
+                        DateOfAgreement = module.DateOfAgreement,
+                        PatchVendorModule = path,
+                        Version = module.Version
+                    };
+                    await _repo.AddAsync(agreedModule);
+                    return RedirectToAction(nameof(AgreedModules));
+                }
+                else return View();
             }
             catch (Exception e)
             {
@@ -103,14 +120,14 @@ namespace CpaRepository.Controllers
                 var vm = new AgreedModuleViewModel
                 {
                     Id = model.Id,
-                    Changes=model.Changes,
-                    CRC=model.CRC,
-                    DateOfAgreement=model.DateOfAgreement,
-                    PatchLetter=model.PatchLetter,
-                    PatchVendorModule=model.PatchVendorModule,
-                    VendorId=model.VendorModule.VendorId,
-                    VendorModuleId=model.VendorModuleId,
-                    Version=model.Version
+                    Changes = model.Changes,
+                    CRC = model.CRC,
+                    DateOfAgreement = model.DateOfAgreement,
+                    PatchLetter = model.PatchLetter,
+                    PatchVendorModule = model.PatchVendorModule,
+                    VendorId = model.VendorModule.VendorId,
+                    VendorModuleId = model.VendorModuleId,
+                    Version = model.Version
                 };
 
                 return View(vm);
@@ -159,9 +176,9 @@ namespace CpaRepository.Controllers
                     PatchLetter = model.PatchLetter,
                     PatchVendorModule = model.PatchVendorModule,
                     VendorId = model.VendorModule.VendorId,
-                    Vendor=model.VendorModule.Vendor,
+                    Vendor = model.VendorModule.Vendor,
                     VendorModuleId = model.VendorModuleId,
-                    VendorModule=model.VendorModule,
+                    VendorModule = model.VendorModule,
                     Version = model.Version
                 };
                 return View(vm);
@@ -201,7 +218,7 @@ namespace CpaRepository.Controllers
             {
                 _logger.LogError(e.Message);
                 return PartialView();
-            }          
+            }
         }
     }
 }

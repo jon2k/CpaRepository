@@ -1,6 +1,8 @@
 ﻿using CpaRepository.ModelsDb;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CpaRepository.ViewModel.AgreedModules
 {
@@ -36,5 +38,9 @@ namespace CpaRepository.ViewModel.AgreedModules
         [Display(Name ="Изменения в модуле")]
         [Required(ErrorMessage = "Не указаны причины изменения модуля")]
         public string Changes { get; set; }
+        [Display(Name = "Выберите файл модуля (.zip)")]
+        [Required(ErrorMessage = "Не указан файл модуля")]
+        [NotMapped]
+        public IFormFile File { get; set; }
     }
 }
