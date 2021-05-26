@@ -97,8 +97,6 @@ namespace CpaRepository.Controllers
             {
                 var model = _repo.GetById(id);
                 var vendor = _repo.GetAllVendors();
-                //var modules = _repo.GetAllCpaModules().ToList();
-                //var cpaModule = modules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
                 ViewBag.VendorId = vendor.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Name }).ToList();
                 var vendorModules = _repo.GetVendorModulesOneVendor(model.VendorModule.VendorId);
                 ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
@@ -113,7 +111,6 @@ namespace CpaRepository.Controllers
                     VendorId=model.VendorModule.VendorId,
                     VendorModuleId=model.VendorModuleId,
                     Version=model.Version
-                    
                 };
 
                 return View(vm);
@@ -121,28 +118,75 @@ namespace CpaRepository.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-                return RedirectToAction(nameof(AgreedModule));
+                return RedirectToAction(nameof(AgreedModules));
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(VendorModuleViewModel module)
+        public async Task<ActionResult> Edit(AgreedModuleViewModel module)
         {
             try
             {
-                var cpaModules = _repo.GetAllCpaModules().Where(p => module.CpaModulesId.Any(l => p.Id == l)).ToList();
-                var vendoeModule = _repo.GetById(module.Id);
-                //vendoeModule.CpaModules = cpaModules;
-                //vendoeModule.NameModule = module.NameModule;
-                //vendoeModule.Description = module.Description;
+                var agreedModule = _repo.GetById(module.Id);
+                agreedModule.Changes = module.Changes;
+                agreedModule.CRC = module.CRC;
+                agreedModule.DateOfAgreement = module.DateOfAgreement;
+                agreedModule.PatchLetter = module.PatchLetter;
+                agreedModule.PatchVendorModule = module.PatchVendorModule;
+                agreedModule.VendorModuleId = module.VendorModuleId;
+                agreedModule.Version = module.Version;
 
-                await _repo.UpdateAsync(vendoeModule);
-                return RedirectToAction(nameof(VendorModule), new { id = module.VendorId });
+                await _repo.UpdateAsync(agreedModule);
+                return RedirectToAction(nameof(AgreedModule));
             }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
                 return View(module.Id);
+            }
+        }
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                var model = _repo.GetById(id);
+                var vm = new AgreedModuleViewModel
+                {
+                    Id = model.Id,
+                    Changes = model.Changes,
+                    CRC = model.CRC,
+                    DateOfAgreement = model.DateOfAgreement,
+                    PatchLetter = model.PatchLetter,
+                    PatchVendorModule = model.PatchVendorModule,
+                    VendorId = model.VendorModule.VendorId,
+                    Vendor=model.VendorModule.Vendor,
+                    VendorModuleId = model.VendorModuleId,
+                    VendorModule=model.VendorModule,
+                    Version = model.Version
+                };
+                return View(vm);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return RedirectToAction(nameof(AgreedModules));
+            }
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                var module = _repo.GetById(id);
+                await _repo.DeleteAsync(module);
+                return RedirectToAction(nameof(AgreedModules));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return View();
             }
         }
 
@@ -157,9 +201,7 @@ namespace CpaRepository.Controllers
             {
                 _logger.LogError(e.Message);
                 return PartialView();
-            }
-            
+            }          
         }
-       
     }
 }
