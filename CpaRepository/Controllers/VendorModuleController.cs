@@ -101,7 +101,9 @@ namespace CpaRepository.Controllers
                     CpaModulesId = modules.Select(n => n.Id).ToArray(),
                     CpaModules=cpaModule,
                     NameModule = model.NameModule,
-                    Description = model.Description
+                    Description = model.Description,
+                    VendorId=model.VendorId
+                 
                 };
 
                 return View(vm);
