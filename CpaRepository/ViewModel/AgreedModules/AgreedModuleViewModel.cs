@@ -29,18 +29,25 @@ namespace CpaRepository.ViewModel.AgreedModules
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Не указана дата согласования")]
         public DateTime DateOfAgreement { get; set; }
-        [Display(Name = "Загрузить модуль")]
-        [Required(ErrorMessage = "Не указан путь к модулю")]
+        [Display(Name = "Ссылка на модуль")]
+        //[Required(ErrorMessage = "Не указан путь к модулю")]
         public string PatchVendorModule { get; set; }
-        [Display(Name = "Письмо о согласовании")]
-        [Required(ErrorMessage = "Не указан путь к письму о согласовании")]
+        [Display(Name = "Ссылка на письмо")]
+        //[Required(ErrorMessage = "Не указан путь к модулю")]
         public string PatchLetter { get; set; }
+        [Display(Name = "Номер письма о согласовании (Пример: ТВВ-Ц10-04/24747)")]
+        [Required(ErrorMessage = "Не указан номер письма о согласовании")]
+        public string NumberLetter { get; set; }
         [Display(Name ="Изменения в модуле")]
         [Required(ErrorMessage = "Не указаны причины изменения модуля")]
         public string Changes { get; set; }
         [Display(Name = "Выберите файл модуля (.zip)")]
         [Required(ErrorMessage = "Не указан файл модуля")]
         [NotMapped]
-        public IFormFile File { get; set; }
+        public IFormFile FileModule { get; set; }
+        [Display(Name = "Выберите файл письма (.pdf)")]
+        [Required(ErrorMessage = "Не указан файл письма")]
+        [NotMapped]
+        public IFormFile FileLetter { get; set; }
     }
 }

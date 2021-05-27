@@ -25,6 +25,7 @@ namespace CpaRepository.Controllers
         {
             _repo = context;
             _logger = logger;
+            _appEnvironment = appEnvironment;
         }
         public ActionResult AgreedModules()
         {
@@ -40,7 +41,7 @@ namespace CpaRepository.Controllers
                     CRC = n.CRC,
                     Changes = n.Changes,
                     DateOfAgreement = n.DateOfAgreement,
-                    PatchLetter = n.PatchLetter,
+                    NumberLetter = n.PatchLetter,
                     PatchVendorModule = n.PatchVendorModule,
                     Version = n.Version
                 });
@@ -75,14 +76,15 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                if (module.File != null)
+                if (module.FileModule != null)
                 {
                     // путь к папке Files
-                    string path = "/Files/" + module.File.FileName;
+                    string path = "\\Files\\" + module.FileModule.FileName;
+                    path = "D:\\Test\\" + module.FileModule.FileName;
                     // сохраняем файл в папку Files в каталоге wwwroot
-                    using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                    using (var fileStream = new FileStream( path, FileMode.Create))
                     {
-                        await module.File.CopyToAsync(fileStream);
+                        await module.FileModule.CopyToAsync(fileStream);
                     }
                     // FileModel file = new FileModel { Name = uploadedFile.FileName, Path = path };
 
@@ -92,7 +94,7 @@ namespace CpaRepository.Controllers
                         VendorModuleId = module.VendorModuleId,
                         Changes = module.Changes,
                         CRC = module.CRC,
-                        PatchLetter = module.PatchLetter,
+                        PatchLetter = module.NumberLetter,
                         DateOfAgreement = module.DateOfAgreement,
                         PatchVendorModule = path,
                         Version = module.Version
@@ -123,7 +125,7 @@ namespace CpaRepository.Controllers
                     Changes = model.Changes,
                     CRC = model.CRC,
                     DateOfAgreement = model.DateOfAgreement,
-                    PatchLetter = model.PatchLetter,
+                    NumberLetter = model.PatchLetter,
                     PatchVendorModule = model.PatchVendorModule,
                     VendorId = model.VendorModule.VendorId,
                     VendorModuleId = model.VendorModuleId,
@@ -148,7 +150,7 @@ namespace CpaRepository.Controllers
                 agreedModule.Changes = module.Changes;
                 agreedModule.CRC = module.CRC;
                 agreedModule.DateOfAgreement = module.DateOfAgreement;
-                agreedModule.PatchLetter = module.PatchLetter;
+                agreedModule.PatchLetter = module.NumberLetter;
                 agreedModule.PatchVendorModule = module.PatchVendorModule;
                 agreedModule.VendorModuleId = module.VendorModuleId;
                 agreedModule.Version = module.Version;
@@ -173,7 +175,7 @@ namespace CpaRepository.Controllers
                     Changes = model.Changes,
                     CRC = model.CRC,
                     DateOfAgreement = model.DateOfAgreement,
-                    PatchLetter = model.PatchLetter,
+                    NumberLetter = model.PatchLetter,
                     PatchVendorModule = model.PatchVendorModule,
                     VendorId = model.VendorModule.VendorId,
                     Vendor = model.VendorModule.Vendor,

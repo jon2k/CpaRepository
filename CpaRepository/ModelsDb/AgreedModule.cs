@@ -30,6 +30,9 @@ namespace CpaRepository.ModelsDb
         [Display(Name = "Письмо о согласовании")]
         [Required(ErrorMessage = "Не указан путь к письму о согласовании")]
         public string PatchLetter { get; set; }
+        [Display(Name = "Номер письма о согласовании")]
+        [Required(ErrorMessage = "Не указан номер письма о согласовании")]
+        public string NumberLetter { get; set; }
         [Display(Name = "Изменения в модуле")]
         [Required(ErrorMessage = "Не указаны причины изменения модуля")]
         public string Changes { get; set; }
