@@ -14,6 +14,7 @@ namespace CpaRepository.ModelsDb
         public int VendorModuleId { get; set; }
         [Required]
         public virtual VendorModule VendorModule { get; set; }
+        public virtual Letter Letter { get; set; }
         [Display(Name = "Контрольная сумма")]
         [Required(ErrorMessage = "Не указана контрольная сумма")]
         public string CRC { get; set; }
