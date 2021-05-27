@@ -1,4 +1,5 @@
 using CpaRepository.EF;
+using CpaRepository.Service;
 using CpaRepository.ModelsDb;
 using CpaRepository.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,8 @@ namespace CpaRepository
             services.AddScoped<Repository<Vendor>>();
             services.AddScoped<Repository<CpaModule>>();
             services.AddScoped<Repository<AgreedModule>>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IPathService, PathService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

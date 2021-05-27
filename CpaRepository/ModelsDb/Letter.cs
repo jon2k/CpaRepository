@@ -8,6 +8,6 @@ namespace CpaRepository.ModelsDb
     public class Letter:EntityBase
     {
         public string PathLetter { get; set; }
-        public List<AgreedModule> AgreedModules { get; set; }
+        public virtual List<AgreedModule> AgreedModules { get; set; }
     }
 }

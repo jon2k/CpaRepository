@@ -28,6 +28,10 @@ namespace CpaRepository.Repository
         {
             return _db.Vendors.Find(id).Name;
         }
+        public string GetVendorModule(int id)
+        {
+            return _db.VendorModules.Find(id).NameModule;
+        }
 
         public IEnumerable<VendorModule> GetVendorModulesOneVendor(int id)
         {

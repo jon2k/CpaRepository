@@ -19,7 +19,7 @@ namespace CpaRepository.EF
         {
             //Logger = logger;
             //Create DB, it it doesn't exist
-            //Database.EnsureDeleted();
+           // Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

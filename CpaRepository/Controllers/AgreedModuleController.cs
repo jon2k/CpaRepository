@@ -1,4 +1,5 @@
 ﻿using CpaRepository.EF;
+using CpaRepository.Service;
 using CpaRepository.ModelsDb;
 using CpaRepository.Repository;
 using CpaRepository.ViewModel.AgreedModules;
@@ -20,12 +21,17 @@ namespace CpaRepository.Controllers
     {
         private readonly ILogger<VendorModuleController> _logger;
         private AgreedModulesRepo _repo;
-        IWebHostEnvironment _appEnvironment;
-        public AgreedModuleController(AgreedModulesRepo context, ILogger<VendorModuleController> logger, IWebHostEnvironment appEnvironment)
+        private IWebHostEnvironment _appEnvironment;
+        private IFileService _fileService;
+        private IPathService _pathService;
+        public AgreedModuleController(AgreedModulesRepo context, ILogger<VendorModuleController> logger,
+            IWebHostEnvironment appEnvironment, IFileService fileService, IPathService pathService)
         {
             _repo = context;
             _logger = logger;
             _appEnvironment = appEnvironment;
+            _fileService = fileService;
+            _pathService = pathService;
         }
         public ActionResult AgreedModules()
         {
@@ -78,16 +84,15 @@ namespace CpaRepository.Controllers
             {
                 if (module.FileModule != null)
                 {
-                    // путь к папке Files
-                    string path = "\\Files\\" + module.FileModule.FileName;
-                    path = "D:\\Test\\" + module.FileModule.FileName;
-                    // сохраняем файл в папку Files в каталоге wwwroot
-                    using (var fileStream = new FileStream( path, FileMode.Create))
-                    {
-                        await module.FileModule.CopyToAsync(fileStream);
-                    }
-                    // FileModel file = new FileModel { Name = uploadedFile.FileName, Path = path };
+                    var nameVendor= _repo.GetNameVendor(module.VendorId);
+                    var nameVendorModule = _repo.GetVendorModule(module.VendorModuleId);                  
+                    var path= _pathService.GetPathModule(nameVendor, nameVendorModule, module.DateOfAgreement );                   
+                   
+                    await _fileService.SaveFileAsync(module.FileModule, path);
 
+                   // сохр письмо
+
+                    //в бд
 
                     var agreedModule = new AgreedModule()
                     {
@@ -108,6 +113,10 @@ namespace CpaRepository.Controllers
             {
                 _logger.LogError(e.Message);
                 return View();
+            }
+            finally
+            {
+                // откат
             }
         }
         public ActionResult Edit(int id)
