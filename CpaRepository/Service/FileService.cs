@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CpaRepository.Service
@@ -32,16 +33,21 @@ namespace CpaRepository.Service
 
         public void Move(string sourceFileName, string destFileName)
         {
-            if (Directory.Exists(sourceFileName))
+            if (File.Exists(sourceFileName))
             {
-                if (Directory.Exists(destFileName))
+                StringBuilder builder = new StringBuilder();
+                var res=destFileName.Split('\\');
+                for (int i = 0; i < res.Length-1; i++)
                 {
-                    File.Move(sourceFileName, destFileName);
+                    builder.Append(res[i]);
+                    builder.Append("\\");
                 }
-                else
+                if (!Directory.Exists(builder.ToString()))
                 {
-                    throw new Exception(message: $"Не существует пути: {destFileName}.");
+                    Directory.CreateDirectory(destFileName);
                 }
+                File.Move(sourceFileName, destFileName);
+              
             }
             else
             {
@@ -49,17 +55,17 @@ namespace CpaRepository.Service
             }
         }
 
-        public async Task SaveFileAsync(IFormFile file, string path)
+        public async Task<string> SaveFileAsync(IFormFile file, string pathFolder)
         {
             try
             {
 
-                if (path != null)
+                if (pathFolder != null)
                 {
                     // проверка на наличие папок
-                    if (!Directory.Exists(path))
+                    if (!Directory.Exists(pathFolder))
                     {
-                        Directory.CreateDirectory(path);
+                        Directory.CreateDirectory(pathFolder);
                     }
                 }
                 else
@@ -68,10 +74,11 @@ namespace CpaRepository.Service
 
                 if (file != null)
                 {
-                    using (var fileStream = new FileStream(path+"\\"+ file.FileName, FileMode.Create))
+                    using (var fileStream = new FileStream(pathFolder+"\\"+ file.FileName, FileMode.Create))
                     {
                         await file.CopyToAsync(fileStream);
                     }
+                    return pathFolder + "\\" + file.FileName;
                 }
                 else
                     throw new Exception(message: "Отсуствует файл для загрузки");

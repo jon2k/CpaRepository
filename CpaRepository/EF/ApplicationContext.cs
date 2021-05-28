@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CpaRepository.ViewModel.AgreedModules;
+using CpaRepository.ViewModel.Letter;
 
 namespace CpaRepository.EF
 {
@@ -19,7 +20,7 @@ namespace CpaRepository.EF
         {
             //Logger = logger;
             //Create DB, it it doesn't exist
-           // Database.EnsureDeleted();
+            // Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -36,6 +37,7 @@ namespace CpaRepository.EF
         //public DbSet<RelationCpaModuleWithVendorModule> RelationCpaModuleWithVendorModules { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<VendorModule> VendorModules { get; set; }
+        public DbSet<Letter> Letters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -118,9 +120,24 @@ namespace CpaRepository.EF
                     new VendorModule{Id=6, VendorId=2, NameModule="Na", Description="" }
 
              });
+            modelBuilder.Entity<Letter>().HasData(
+           new Letter[]
+           {
+                    new Letter{Id=1, VendorId=1, NumberLetter="123", DateOfLetter=DateTime.Now   },
+                    new Letter{Id=2, VendorId=1, NumberLetter="456", DateOfLetter=DateTime.Now  },
+                    new Letter{Id=3, VendorId=1, NumberLetter="789", DateOfLetter=DateTime.Now },
+                    new Letter{Id=4, VendorId=1, NumberLetter="321", DateOfLetter=DateTime.Now},
+                    new Letter{Id=5, VendorId=2, NumberLetter="987", DateOfLetter=DateTime.Now},
+                    new Letter{Id=6, VendorId=2, NumberLetter="654", DateOfLetter=DateTime.Now }
+
+           });
         }
 
         public DbSet<CpaRepository.ViewModel.AgreedModules.AgreedModuleViewModel> AgreedModuleViewModel { get; set; }
+
+        public DbSet<CpaRepository.ModelsDb.Letter> Letter { get; set; }
+
+        public DbSet<CpaRepository.ViewModel.Letter.LetterViewModel> LetterViewModel { get; set; }
     }
 
 }

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<CpaRepository.ModelsDb.Letter>
+
+@{
+    ViewData["Title"] = "Letters";
+}
+
+<h1>Letters</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberLetter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PathLetter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfLetter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendor)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberLetter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PathLetter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfLetter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vendor.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

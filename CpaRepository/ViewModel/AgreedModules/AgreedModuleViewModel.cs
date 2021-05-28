@@ -45,9 +45,9 @@ namespace CpaRepository.ViewModel.AgreedModules
         [Required(ErrorMessage = "Не указан файл модуля")]
         [NotMapped]
         public IFormFile FileModule { get; set; }
-        [Display(Name = "Выберите файл письма (.pdf)")]
-        [Required(ErrorMessage = "Не указан файл письма")]
-        [NotMapped]
-        public IFormFile FileLetter { get; set; }
+        //[Display(Name = "Выберите файл письма (.pdf)")]
+        //[Required(ErrorMessage = "Не указан файл письма")]
+        //[NotMapped]
+        //public IFormFile FileLetter { get; set; }
     }
 }

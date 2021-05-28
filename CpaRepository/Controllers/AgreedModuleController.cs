@@ -46,7 +46,7 @@ namespace CpaRepository.Controllers
                     VendorModule = n.VendorModule,
                     CRC = n.CRC,
                     Changes = n.Changes,
-                    DateOfAgreement = n.DateOfAgreement,
+                   // DateOfAgreement = n.DateOfAgreement,
                     NumberLetter = n.PatchLetter,
                     PatchVendorModule = n.PatchVendorModule,
                     Version = n.Version
@@ -86,7 +86,7 @@ namespace CpaRepository.Controllers
                 {
                     var nameVendor= _repo.GetNameVendor(module.VendorId);
                     var nameVendorModule = _repo.GetVendorModule(module.VendorModuleId);                  
-                    var path= _pathService.GetPathModule(nameVendor, nameVendorModule, module.DateOfAgreement );                   
+                    var path= _pathService.GetPathFolderForModule(nameVendor, nameVendorModule, module.DateOfAgreement );                   
                    
                     await _fileService.SaveFileAsync(module.FileModule, path);
 
@@ -100,7 +100,7 @@ namespace CpaRepository.Controllers
                         Changes = module.Changes,
                         CRC = module.CRC,
                         PatchLetter = module.NumberLetter,
-                        DateOfAgreement = module.DateOfAgreement,
+                       // DateOfAgreement = module.DateOfAgreement,
                         PatchVendorModule = path,
                         Version = module.Version
                     };
@@ -133,7 +133,7 @@ namespace CpaRepository.Controllers
                     Id = model.Id,
                     Changes = model.Changes,
                     CRC = model.CRC,
-                    DateOfAgreement = model.DateOfAgreement,
+                   // DateOfAgreement = model.DateOfAgreement,
                     NumberLetter = model.PatchLetter,
                     PatchVendorModule = model.PatchVendorModule,
                     VendorId = model.VendorModule.VendorId,
@@ -158,7 +158,7 @@ namespace CpaRepository.Controllers
                 var agreedModule = _repo.GetById(module.Id);
                 agreedModule.Changes = module.Changes;
                 agreedModule.CRC = module.CRC;
-                agreedModule.DateOfAgreement = module.DateOfAgreement;
+               // agreedModule.DateOfAgreement = module.DateOfAgreement;
                 agreedModule.PatchLetter = module.NumberLetter;
                 agreedModule.PatchVendorModule = module.PatchVendorModule;
                 agreedModule.VendorModuleId = module.VendorModuleId;
@@ -183,7 +183,7 @@ namespace CpaRepository.Controllers
                     Id = model.Id,
                     Changes = model.Changes,
                     CRC = model.CRC,
-                    DateOfAgreement = model.DateOfAgreement,
+                  //  DateOfAgreement = model.DateOfAgreement,
                     NumberLetter = model.PatchLetter,
                     PatchVendorModule = model.PatchVendorModule,
                     VendorId = model.VendorModule.VendorId,

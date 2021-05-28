@@ -9,7 +9,7 @@ namespace CpaRepository.Service
 {
     public interface IFileService
     {
-        public Task SaveFileAsync(IFormFile file, string path);
+        public Task<string> SaveFileAsync(IFormFile file, string pathFolder);
         public void DeleteFile(string path);
         public void Move(string sourceFileName, string destFileName);
 

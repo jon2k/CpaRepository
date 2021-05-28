@@ -32,6 +32,7 @@ namespace CpaRepository
             services.AddControllersWithViews();
             services.AddScoped<VendorModuleRepo>();
             services.AddScoped<AgreedModulesRepo>();
+            services.AddScoped<LetterRepo>();
             services.AddScoped<Repository<Vendor>>();
             services.AddScoped<Repository<CpaModule>>();
             services.AddScoped<Repository<AgreedModule>>();
