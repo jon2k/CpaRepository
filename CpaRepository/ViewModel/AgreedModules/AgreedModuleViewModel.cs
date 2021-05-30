@@ -14,33 +14,51 @@ namespace CpaRepository.ViewModel.AgreedModules
         public int VendorId { get; set; }
       //  [Required]
         public virtual Vendor Vendor { get; set; }
+        
         [Display(Name = "Вендорный модуль")]
         [Required(ErrorMessage = "Не указан вендорный модуль")]
         public int VendorModuleId { get; set; }
        
         public virtual CpaRepository.ModelsDb.VendorModule VendorModule { get; set; }
+
+        [Display(Name = "Письмо о согласовании")]
+        [Required(ErrorMessage = "Не указано письмо о согласовании")]
+        public int LetterId { get; set; }
+
+        public virtual CpaRepository.ModelsDb.Letter Letter { get; set; }
+
         [Display(Name = "Контрольная сумма")]
         [Required(ErrorMessage = "Не указана контрольная сумма")]
         public string CRC { get; set; }
+       
         [Display(Name = "Версия модуля")]
         [Required(ErrorMessage = "Не указана версия")]
         public string Version { get; set; }
+       
         [Display(Name = "Дата согласования")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Не указана дата согласования")]
-        public DateTime DateOfAgreement { get; set; }
+        public DateTime DateOfLetter { get; set; }
+       
         [Display(Name = "Ссылка на модуль")]
         //[Required(ErrorMessage = "Не указан путь к модулю")]
-        public string PatchVendorModule { get; set; }
+        public string PathVendorModule { get; set; }
+        
         [Display(Name = "Ссылка на письмо")]
         //[Required(ErrorMessage = "Не указан путь к модулю")]
         public string PatchLetter { get; set; }
-        [Display(Name = "Номер письма о согласовании (Пример: ТВВ-Ц10-04/24747)")]
+
+        [Display(Name = "Номер письма о согласовании")]
         [Required(ErrorMessage = "Не указан номер письма о согласовании")]
         public string NumberLetter { get; set; }
+
         [Display(Name ="Изменения в модуле")]
         [Required(ErrorMessage = "Не указаны причины изменения модуля")]
         public string Changes { get; set; }
+
+        [Display(Name = "Наличие модуля в хранилище")]
+        public bool ExistModule { get; set; }
+
         [Display(Name = "Выберите файл модуля (.zip)")]
         [Required(ErrorMessage = "Не указан файл модуля")]
         [NotMapped]

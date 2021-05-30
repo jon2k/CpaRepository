@@ -98,8 +98,9 @@ namespace CpaRepository.Controllers
                 var vm = new VendorModuleViewModel
                 {
                     Id = model.Id,
-                    CpaModulesId = modules.Select(n => n.Id).ToArray(),
+                    //CpaModulesId = modules.Select(n => n.Id).ToArray(),
                     CpaModules=cpaModule,
+                    CpaModulesId=model.CpaModules.Select(n=>n.Id).ToArray(),
                     NameModule = model.NameModule,
                     Description = model.Description,
                     VendorId=model.VendorId

@@ -11,7 +11,7 @@ namespace CpaRepository.ModelsDb
         [Display(Name = "Номер письма о согласовании")]
         [Required(ErrorMessage = "Не указан номер письма о согласовании")]
         public string NumberLetter { get; set; }
-        
+        [Required]
         public string PathLetter { get; set; }
        
         [Display(Name = "Дата согласования")]

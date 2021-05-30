@@ -23,6 +23,11 @@
                 <span asp-validation-for="VendorModuleId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="LetterId" class="control-label"></label>
+                <select asp-for="LetterId" class="form-control" asp-items="ViewBag.LettersId" id="letters"></select>
+                <span asp-validation-for="LetterId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="CRC" class="control-label"></label>
                 <input asp-for="CRC" class="form-control" />
                 <span asp-validation-for="CRC" class="text-danger"></span>
@@ -32,19 +37,15 @@
                 <input asp-for="Version" class="form-control" />
                 <span asp-validation-for="Version" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DateOfAgreement" class="control-label"></label>
-                <input asp-for="DateOfAgreement" class="form-control" />
-                <span asp-validation-for="DateOfAgreement" class="text-danger"></span>
-            </div>
+           
             <div class="form-group">
                 <label asp-for="Changes" class="control-label"></label>
-                <input asp-for="Changes"  class="form-control" />
+                <input asp-for="Changes" class="form-control" />
                 <span asp-validation-for="Changes" class="text-danger"></span>
             </div>
 
-        
-   
+
+
             <div class="form-group">
                 <label asp-for="FileModule" class="control-label"></label>
                 <input asp-for="FileModule" type="file" accept=".zip" class="form-control" />
@@ -77,6 +78,15 @@
 
                     // заменяем содержимое присланным частичным представлением
                     $('#vendorModules').replaceWith(data);
+                }
+            });
+             $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetLetters")/' + id,
+                success: function (data) {
+
+                    // заменяем содержимое присланным частичным представлением
+                    $('#letters').replaceWith(data);
                 }
             });
         });

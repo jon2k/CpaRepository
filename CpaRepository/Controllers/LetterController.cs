@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace CpaRepository.Controllers
 {
@@ -33,8 +34,14 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                IEnumerable<Letter> vendors = _repo.GetAll();
-                return View(vendors);
+                var letters = _repo.GetAll().OrderByDescending(n => n.DateOfLetter);
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<Letter, LetterViewModel>()
+                    .ForMember(nameof(LetterViewModel.ExistLetter), opt => opt
+                    .MapFrom(src => System.IO.File.Exists(src.PathLetter))));
+                var mapper = new Mapper(config);
+                var vm = mapper.Map<List<LetterViewModel>>(letters);
+
+                return View(vm);
             }
             catch (Exception e)
             {
@@ -48,8 +55,6 @@ namespace CpaRepository.Controllers
             {
                 var vendor = _repo.GetAllVendors();
                 ViewBag.VendorId = vendor.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Name }).ToList();
-                // var vendorModules = _repo.GetVendorModulesOneVendor(vendor.FirstOrDefault().Id);
-                // ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
                 return View();
             }
             catch (Exception e)
@@ -60,25 +65,24 @@ namespace CpaRepository.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(LetterViewModel letter)
+        public async Task<ActionResult> Create(LetterViewModel letterViewModel)
         {
             try
             {
-                if (letter.FileLetter != null)
+                if (letterViewModel.FileLetter != null)
                 {
-                    var nameVendor = _repo.GetNameVendor(letter.VendorId);
-                    var pathFolder = _pathService.GetPathFolderForLetter(nameVendor, letter.DateOfLetter);
-                    var fullPath = await _fileService.SaveFileAsync(letter.FileLetter, pathFolder);
+                    var nameVendor = _repo.GetNameVendor(letterViewModel.VendorId);
+                    var pathFolder = _pathService.GetPathFolderForLetter(nameVendor, letterViewModel.DateOfLetter);
+                    var fullPath = await _fileService.SaveFileAsync(letterViewModel.FileLetter, pathFolder);
                     try
                     {
-                        var newLetter = new Letter()
-                        {
-                            DateOfLetter = letter.DateOfLetter,
-                            NumberLetter = letter.NumberLetter,
-                            VendorId = letter.VendorId,
-                            PathLetter = fullPath
-                        };
-                        await _repo.AddAsync(newLetter);
+                        var config = new MapperConfiguration(cfg => cfg.CreateMap<LetterViewModel, Letter>()
+                            .ForMember(nameof(Letter.PathLetter), opt => opt
+                            .MapFrom(src => fullPath)));
+                        var mapper = new Mapper(config);
+                        var letter = mapper.Map<Letter>(letterViewModel);
+
+                        await _repo.AddAsync(letter);
                         return RedirectToAction(nameof(Letters));
                     }
                     catch (Exception e)
@@ -101,19 +105,18 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                var model = _repo.GetById(id);
+                var letter = _repo.GetById(id);
                 var vendor = _repo.GetAllVendors();
-                ViewBag.VendorId = vendor.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Name }).ToList();
-                // var vendorModules = _repo.GetVendorModulesOneVendor(model.VendorModule.VendorId);
-                // ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
-                var vm = new LetterViewModel
+                ViewBag.VendorId = vendor.Select(n => new SelectListItem
                 {
-                    Id = model.Id,
-                    DateOfLetter = model.DateOfLetter,
-                    Vendor = model.Vendor,
-                    NumberLetter=model.NumberLetter
-                };
-                return View(vm);
+                    Value = n.Id.ToString(),
+                    Text = n.Name,
+                }).ToList();
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<Letter, LetterViewModel>());
+                var mapper = new Mapper(config);
+                var letterViewModel = mapper.Map<LetterViewModel>(letter);
+
+                return View(letterViewModel);
             }
             catch (Exception e)
             {
@@ -122,37 +125,37 @@ namespace CpaRepository.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult> Edit(LetterViewModel letter)
+        public async Task<ActionResult> Edit(LetterViewModel letterViewModel)
         {
             try
             {
-                var letterDb = _repo.GetById(letter.Id);
-                var nameVendor = _repo.GetNameVendor(letter.VendorId);
+                var letterDb = _repo.GetById(letterViewModel.Id);
+                var nameVendor = _repo.GetNameVendor(letterViewModel.VendorId);
                 var fullPath = letterDb.PathLetter;
-                if (letter.FileLetter == null && (letter.VendorId!=letterDb.VendorId || letter.DateOfLetter!=letterDb.DateOfLetter))
+                if (letterViewModel.FileLetter == null && (letterViewModel.VendorId != letterDb.VendorId || letterViewModel.DateOfLetter != letterDb.DateOfLetter))
                 {
                     // Перемещаем файл в другую папку.
-                    var pathFolder = _pathService.GetPathFolderForLetter(nameVendor, letter.DateOfLetter);
-                    var fullNewPath = pathFolder +"\\" +letterDb.PathLetter.Split('\\').Last();
-                    _fileService.Move(letterDb.PathLetter, fullNewPath);
+                    var pathFolder = _pathService.GetPathFolderForLetter(nameVendor, letterViewModel.DateOfLetter);
+                    fullPath = pathFolder + "\\" + letterDb.PathLetter.Split('\\').Last();
+                    _fileService.Move(letterDb.PathLetter, fullPath);
                 }
-                if (letter.FileLetter != null)
+                if (letterViewModel.FileLetter != null)
                 {
                     // Добавляем файл.
                     _fileService.DeleteFile(letterDb.PathLetter);
-                  //  var nameVendor = _repo.GetNameVendor(letter.VendorId);
-                    var pathFolder = _pathService.GetPathFolderForLetter(nameVendor, letter.DateOfLetter);
-                    fullPath = await _fileService.SaveFileAsync(letter.FileLetter, pathFolder);
+                    //  var nameVendor = _repo.GetNameVendor(letter.VendorId);
+                    var pathFolder = _pathService.GetPathFolderForLetter(nameVendor, letterViewModel.DateOfLetter);
+                    fullPath = await _fileService.SaveFileAsync(letterViewModel.FileLetter, pathFolder);
                 }
-
                 try
                 {
-                    var newLetter = _repo.GetById(letter.Id);
-                    newLetter.NumberLetter = letter.NumberLetter;
-                    newLetter.PathLetter = fullPath;
-                    newLetter.VendorId = letter.VendorId;
+                    var updateLetter = _repo.GetById(letterViewModel.Id);
+                    updateLetter.NumberLetter = letterViewModel.NumberLetter;
+                    updateLetter.PathLetter = fullPath;
+                    updateLetter.VendorId = letterViewModel.VendorId;
+                    updateLetter.DateOfLetter = letterViewModel.DateOfLetter;
 
-                    await _repo.UpdateAsync(newLetter);
+                    await _repo.UpdateAsync(updateLetter);
                     return RedirectToAction(nameof(Letters));
                 }
                 catch (Exception e)
@@ -160,14 +163,70 @@ namespace CpaRepository.Controllers
                     _logger.LogError(e.Message);
                     // Удаляем файл, если запись в БД не прошла
                     _fileService.DeleteFile(fullPath);
-                    return View(letter.Id);
+                    return View(letterViewModel.Id);
                 }
 
             }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-                return View(letter.Id);
+                return View(letterViewModel.Id);
+            }
+        }
+
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                var module = _repo.GetById(id);
+                // ViewBag.Vendor = _repo.GetNameVendor(module.VendorId);
+                return View(module);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return RedirectToAction(nameof(Letters));
+            }
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                var letter = _repo.GetById(id);
+                await _repo.DeleteAsync(letter);
+                _fileService.DeleteFile(letter.PathLetter);
+
+                return RedirectToAction(nameof(Letters));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return View();
+            }
+        }
+       
+        public IActionResult DownloadFile(int id)
+        {
+            try
+            {
+                var letter = _repo.GetById(id);
+                if (letter.PathLetter != null)
+                {
+                    return PhysicalFile(letter.PathLetter, "application/octet-stream", letter.PathLetter.Split('\\').Last());
+                }
+                else
+                {
+                    _logger.LogError("Отсутствует полный путь к файлу письма.");
+                    return RedirectToAction(nameof(Letters));
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return RedirectToAction(nameof(Letters));
             }
         }
     }

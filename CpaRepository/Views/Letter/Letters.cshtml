@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CpaRepository.ModelsDb.Letter>
+﻿@model IEnumerable<CpaRepository.ViewModel.Letter.LetterViewModel>
 
 @{
     ViewData["Title"] = "Letters";
@@ -13,40 +13,45 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NumberLetter)
+                @Html.DisplayNameFor(model => model.Vendor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PathLetter)
+                @Html.DisplayNameFor(model => model.NumberLetter)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateOfLetter)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Vendor)
+                @Html.DisplayNameFor(model => model.ExistLetter)
             </th>
+
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberLetter)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PathLetter)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfLetter)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Vendor.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vendor.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberLetter)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfLetter)
+                </td>
+                 <td>
+                    @Html.DisplayFor(modelItem => item.ExistLetter)
+                </td>
+
+                <td>
+                    @if (item.ExistLetter) {<a asp-action="DownloadFile" asp-route-id="@item.Id">Download</a> <a> |</a> }
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

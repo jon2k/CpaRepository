@@ -30,7 +30,10 @@ namespace CpaRepository.ViewModel.Letter
        
        // [Display(Name = "Вендор")]
         public virtual Vendor Vendor { get; set; }
-        
+
+        [Display(Name = "Наличие письма в хранилище")]
+        public bool ExistLetter { get; set; }
+
         [Display(Name = "Выберите файл письма (.pdf)")]
        // [Required(ErrorMessage = "Не указан файл письма")]
         [NotMapped]

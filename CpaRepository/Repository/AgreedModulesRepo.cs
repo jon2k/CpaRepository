@@ -28,7 +28,7 @@ namespace CpaRepository.Repository
         {
             return _db.Vendors.Find(id).Name;
         }
-        public string GetVendorModule(int id)
+        public string GetNameVendorModule(int id)
         {
             return _db.VendorModules.Find(id).NameModule;
         }
@@ -37,8 +37,16 @@ namespace CpaRepository.Repository
         {
             return _db.VendorModules.Where(n => n.VendorId == id).ToList();
         }
+        public IEnumerable<Letter> GetLettersOneVendor(int id)
+        {
+            return _db.Letter.Where(n => n.VendorId == id).ToList();
+        }
+        public Letter GetLetterById(int id)
+        {
+            return _db.Letter.Find(id);
+        }
 
-      
+
     }
 }
 

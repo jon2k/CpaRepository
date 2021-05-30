@@ -15,12 +15,13 @@ namespace CpaRepository.Service
                 if (path != null)
                 {
                     // проверка на наличие папок
-                    if (Directory.Exists(path))
+                    if (File.Exists(path))
                     {
-                        Directory.Delete(path);
+                        File.Delete(path);
+                        DeleteEmptyFolder(path);
                     }
                     else
-                        throw new Exception(message: $"Не существует пути: {path}.");
+                        DeleteEmptyFolder(path);
                 }
                 else
                     throw new Exception(message: "Путь не можеть быть null");
@@ -34,20 +35,14 @@ namespace CpaRepository.Service
         public void Move(string sourceFileName, string destFileName)
         {
             if (File.Exists(sourceFileName))
-            {
-                StringBuilder builder = new StringBuilder();
-                var res=destFileName.Split('\\');
-                for (int i = 0; i < res.Length-1; i++)
+            {              
+                var destPath=Path.GetDirectoryName(destFileName);
+                if (!Directory.Exists(destPath))
                 {
-                    builder.Append(res[i]);
-                    builder.Append("\\");
-                }
-                if (!Directory.Exists(builder.ToString()))
-                {
-                    Directory.CreateDirectory(destFileName);
+                    Directory.CreateDirectory(destPath);
                 }
                 File.Move(sourceFileName, destFileName);
-              
+                DeleteEmptyFolder(sourceFileName);
             }
             else
             {
@@ -59,7 +54,6 @@ namespace CpaRepository.Service
         {
             try
             {
-
                 if (pathFolder != null)
                 {
                     // проверка на наличие папок
@@ -82,14 +76,36 @@ namespace CpaRepository.Service
                 }
                 else
                     throw new Exception(message: "Отсуствует файл для загрузки");
-
             }
             catch
             {
-
                 throw;
             }
 
+        }
+        private void DeleteEmptyFolder(string path)
+        {
+            string pathFolder = Path.GetDirectoryName(path);
+            var directoryInfo = new DirectoryInfo(pathFolder);
+            Delete(directoryInfo);
+
+            void Delete(DirectoryInfo di)
+            {
+                try
+                {
+                    var ee = di.GetFiles();
+                    var ww = di.GetDirectories().Length;
+                    if (di.GetFiles().Length == 0 && di.GetDirectories().Length == 0)
+                    {
+                        di.Delete();
+                        Delete(di.Parent);
+                    }
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    Delete(di.Parent);
+                }
+            }
         }
     }
 }

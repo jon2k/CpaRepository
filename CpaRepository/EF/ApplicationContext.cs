@@ -20,7 +20,7 @@ namespace CpaRepository.EF
         {
             //Logger = logger;
             //Create DB, it it doesn't exist
-            // Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -120,7 +120,7 @@ namespace CpaRepository.EF
                     new VendorModule{Id=6, VendorId=2, NameModule="Na", Description="" }
 
              });
-            modelBuilder.Entity<Letter>().HasData(
+           /* modelBuilder.Entity<Letter>().HasData(
            new Letter[]
            {
                     new Letter{Id=1, VendorId=1, NumberLetter="123", DateOfLetter=DateTime.Now   },
@@ -130,7 +130,7 @@ namespace CpaRepository.EF
                     new Letter{Id=5, VendorId=2, NumberLetter="987", DateOfLetter=DateTime.Now},
                     new Letter{Id=6, VendorId=2, NumberLetter="654", DateOfLetter=DateTime.Now }
 
-           });
+           });*/
         }
 
         public DbSet<CpaRepository.ViewModel.AgreedModules.AgreedModuleViewModel> AgreedModuleViewModel { get; set; }

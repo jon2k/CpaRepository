@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace CpaRepository.Controllers
 {
@@ -37,22 +38,17 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                var model = _repo.GetAll().Select(n => new AgreedModuleViewModel
-                {
-                    Id = n.Id,
-                    VendorId = n.VendorModule.VendorId,
-                    Vendor = n.VendorModule.Vendor,
-                    VendorModuleId = n.VendorModuleId,
-                    VendorModule = n.VendorModule,
-                    CRC = n.CRC,
-                    Changes = n.Changes,
-                   // DateOfAgreement = n.DateOfAgreement,
-                    NumberLetter = n.PatchLetter,
-                    PatchVendorModule = n.PatchVendorModule,
-                    Version = n.Version
-                });
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<AgreedModule, AgreedModuleViewModel>()
+                  .ForMember(nameof(AgreedModuleViewModel.ExistModule), opt => opt
+                  .MapFrom(src => System.IO.File.Exists(src.PathVendorModule)))
+                  .ForMember(nameof(AgreedModuleViewModel.DateOfLetter), opt => opt.MapFrom(src => src.Letter.DateOfLetter))
+                  .ForMember(nameof(AgreedModuleViewModel.NumberLetter), opt => opt.MapFrom(src => src.Letter.NumberLetter))
+                  .ForMember(nameof(AgreedModuleViewModel.VendorId), opt => opt.MapFrom(src => src.VendorModule.VendorId))
+                  .ForMember(nameof(AgreedModuleViewModel.Vendor), opt => opt.MapFrom(src => src.VendorModule.Vendor)));
+                var mapper = new Mapper(config);
+                var vm = mapper.Map<List<AgreedModuleViewModel>>(_repo.GetAll()).OrderByDescending(m => m.DateOfLetter);
 
-                return View(model);
+                return View(vm);
             }
             catch (Exception e)
             {
@@ -67,7 +63,17 @@ namespace CpaRepository.Controllers
                 var vendor = _repo.GetAllVendors();
                 ViewBag.VendorId = vendor.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Name }).ToList();
                 var vendorModules = _repo.GetVendorModulesOneVendor(vendor.FirstOrDefault().Id);
-                ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
+                ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem
+                {
+                    Value = n.Id.ToString(),
+                    Text = n.NameModule
+                }).ToList();
+                var letters = _repo.GetLettersOneVendor(vendor.FirstOrDefault().Id);
+                ViewBag.LettersId = letters.Select(n => new SelectListItem
+                {
+                    Value = n.Id.ToString(),
+                    Text = n.NumberLetter
+                }).ToList();
                 return View();
             }
             catch (Exception e)
@@ -84,39 +90,45 @@ namespace CpaRepository.Controllers
             {
                 if (module.FileModule != null)
                 {
-                    var nameVendor= _repo.GetNameVendor(module.VendorId);
-                    var nameVendorModule = _repo.GetVendorModule(module.VendorModuleId);                  
-                    var path= _pathService.GetPathFolderForModule(nameVendor, nameVendorModule, module.DateOfAgreement );                   
-                   
-                    await _fileService.SaveFileAsync(module.FileModule, path);
+                    var nameVendor = _repo.GetNameVendor(module.VendorId);
+                    var nameVendorModule = _repo.GetNameVendorModule(module.VendorModuleId);
+                    var letter = _repo.GetLetterById(module.LetterId);
+                    var path = _pathService.GetPathFolderForModule(nameVendor, nameVendorModule, letter.DateOfLetter);
 
-                   // сохр письмо
+                    var fullPath = await _fileService.SaveFileAsync(module.FileModule, path);
 
-                    //в бд
-
-                    var agreedModule = new AgreedModule()
+                    try
                     {
-                        VendorModuleId = module.VendorModuleId,
-                        Changes = module.Changes,
-                        CRC = module.CRC,
-                        PatchLetter = module.NumberLetter,
-                       // DateOfAgreement = module.DateOfAgreement,
-                        PatchVendorModule = path,
-                        Version = module.Version
-                    };
-                    await _repo.AddAsync(agreedModule);
-                    return RedirectToAction(nameof(AgreedModules));
+                        var agreedModule = new AgreedModule()
+                        {
+                            VendorModuleId = module.VendorModuleId,
+                            Changes = module.Changes,
+                            CRC = module.CRC,
+                            PathVendorModule = fullPath,
+                            Version = module.Version,
+                            Letter = letter
+                        };
+                        await _repo.AddAsync(agreedModule);
+                        return RedirectToAction(nameof(AgreedModules));
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e.Message);
+                        // Удаляем файл, если запись в БД не прошла
+                        _fileService.DeleteFile(fullPath);
+                        return View();
+                    }
                 }
-                else return View();
+                else
+                {
+                    _logger.LogError("Отсуствует файл.");
+                    return View();
+                }
             }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
                 return View();
-            }
-            finally
-            {
-                // откат
             }
         }
         public ActionResult Edit(int id)
@@ -128,16 +140,19 @@ namespace CpaRepository.Controllers
                 ViewBag.VendorId = vendor.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Name }).ToList();
                 var vendorModules = _repo.GetVendorModulesOneVendor(model.VendorModule.VendorId);
                 ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
+                var letters = _repo.GetLettersOneVendor(model.VendorModule.VendorId);
+                ViewBag.LettersId = letters.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NumberLetter }).ToList();
                 var vm = new AgreedModuleViewModel
                 {
                     Id = model.Id,
                     Changes = model.Changes,
                     CRC = model.CRC,
-                   // DateOfAgreement = model.DateOfAgreement,
-                    NumberLetter = model.PatchLetter,
-                    PatchVendorModule = model.PatchVendorModule,
+                    // DateOfAgreement = model.DateOfAgreement,
+                    NumberLetter = model.Letter.NumberLetter,
+                    PathVendorModule = model.PathVendorModule,
                     VendorId = model.VendorModule.VendorId,
                     VendorModuleId = model.VendorModuleId,
+                    LetterId = model.Letter.Id,
                     Version = model.Version
                 };
 
@@ -155,17 +170,48 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                var agreedModule = _repo.GetById(module.Id);
-                agreedModule.Changes = module.Changes;
-                agreedModule.CRC = module.CRC;
-               // agreedModule.DateOfAgreement = module.DateOfAgreement;
-                agreedModule.PatchLetter = module.NumberLetter;
-                agreedModule.PatchVendorModule = module.PatchVendorModule;
-                agreedModule.VendorModuleId = module.VendorModuleId;
-                agreedModule.Version = module.Version;
+                var moduleDb = _repo.GetById(module.Id);
+                var nameVendor = _repo.GetNameVendor(module.VendorId);
+                var nameVendorModule = _repo.GetNameVendorModule(module.VendorModuleId);
+                var letter = _repo.GetLetterById(module.LetterId);
+                var fullPath = moduleDb.PathVendorModule;
+                if (module.FileModule == null && (module.VendorId != moduleDb.VendorModule.Vendor.Id
+                    || module.LetterId != moduleDb.Letter.Id || module.VendorModuleId != moduleDb.VendorModuleId))
+                {
+                    // Перемещаем файл в другую папку.
+                    var pathFolder = _pathService.GetPathFolderForModule(nameVendor, nameVendorModule, letter.DateOfLetter);
+                    fullPath = pathFolder + "\\" + moduleDb.PathVendorModule.Split('\\').Last();
+                    _fileService.Move(moduleDb.PathVendorModule, fullPath);
+                }
+                if (module.FileModule != null)
+                {
+                    // Добавляем файл.
+                    _fileService.DeleteFile(moduleDb.PathVendorModule);
+                    var pathFolder = _pathService.GetPathFolderForModule(nameVendor, nameVendorModule, letter.DateOfLetter);
+                    fullPath = await _fileService.SaveFileAsync(module.FileModule, pathFolder);
+                }
 
-                await _repo.UpdateAsync(agreedModule);
-                return RedirectToAction(nameof(AgreedModule));
+                try
+                {
+                    var updateModule = _repo.GetById(module.Id);
+                    updateModule.Changes = module.Changes;
+                    updateModule.CRC = module.CRC;
+                    updateModule.LetterId = module.LetterId;
+                    updateModule.PathVendorModule = fullPath;
+                    updateModule.VendorModuleId = module.VendorModuleId;
+                    updateModule.Version = module.Version;
+
+                    await _repo.UpdateAsync(updateModule);
+                    return RedirectToAction(nameof(AgreedModules));
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e.Message);
+                    // Удаляем файл, если запись в БД не прошла
+                    _fileService.DeleteFile(fullPath);
+                    return View(module.Id);
+                }
+
             }
             catch (Exception e)
             {
@@ -183,9 +229,9 @@ namespace CpaRepository.Controllers
                     Id = model.Id,
                     Changes = model.Changes,
                     CRC = model.CRC,
-                  //  DateOfAgreement = model.DateOfAgreement,
-                    NumberLetter = model.PatchLetter,
-                    PatchVendorModule = model.PatchVendorModule,
+                    //  DateOfAgreement = model.DateOfAgreement,
+                    NumberLetter = model.Letter.NumberLetter,
+                    PathVendorModule = model.PathVendorModule,
                     VendorId = model.VendorModule.VendorId,
                     Vendor = model.VendorModule.Vendor,
                     VendorModuleId = model.VendorModuleId,
@@ -209,6 +255,7 @@ namespace CpaRepository.Controllers
             {
                 var module = _repo.GetById(id);
                 await _repo.DeleteAsync(module);
+                _fileService.DeleteFile(module.PathVendorModule);
                 return RedirectToAction(nameof(AgreedModules));
             }
             catch (Exception e)
@@ -229,6 +276,40 @@ namespace CpaRepository.Controllers
             {
                 _logger.LogError(e.Message);
                 return PartialView();
+            }
+        }
+        public ActionResult GetLetters(int id)
+        {
+            try
+            {
+                ViewBag.Letters = _repo.GetLettersOneVendor(id);
+                return PartialView();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return PartialView();
+            }
+        }
+        public IActionResult DownloadFile(int id)
+        {
+            try
+            {
+                var module = _repo.GetById(id);
+                if (module.PathVendorModule != null)
+                {
+                    return PhysicalFile(module.PathVendorModule, "application/octet-stream", module.PathVendorModule.Split('\\').Last());
+                }
+                else
+                {
+                    _logger.LogError("Отсутствует полный путь к файлу письма.");
+                    return RedirectToAction(nameof(AgreedModules));
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return RedirectToAction(nameof(AgreedModules));
             }
         }
     }

@@ -5,32 +5,29 @@ namespace Console
 {
     public class Test
     {
-        public string Go(int x)
-        {
 
-            try
-            {
-                var res=5 / x;
-                return res.ToString();
-            }
-            catch (Exception)
-            {
-
-                return "Catch";
-            }
-            finally
-            {
-                System.Console.WriteLine("Finaly");
-            }
-        }
     }
     class Program
     {
         static void Main(string[] args)
         {
+            var path = @"d:\Project VS\CpaRepository\CpaRepository\wwwroot\Root\Letters\Emicon\28.05.2021\123\уу\уу\ц\ечею.exe";
 
-            var test = new Test();
-            System.Console.WriteLine(test.Go(0));
+            string pathFolder= Path.GetDirectoryName(path);
+            var directoryInfo = new DirectoryInfo(pathFolder);        
+            Delete(directoryInfo);         
+           
+            void Delete(DirectoryInfo di)
+            {
+                var ee = di.GetFiles();
+                var rr = di.GetDirectories();
+                if (di.GetFiles().Length == 0 && di.GetDirectories().Length==0)
+                {                  
+                    di.Delete();
+                    Delete(di.Parent);
+                }
+                
+            }
         }
     }
 }

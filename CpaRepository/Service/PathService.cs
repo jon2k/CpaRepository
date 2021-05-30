@@ -26,7 +26,7 @@ namespace CpaRepository.Service
         {
             if (_environment != null && nameVendor != null && nameVendorModule != null)
             {
-                return _environment.WebRootPath + "\\Root\\" 
+                return _environment.WebRootPath + "\\Root\\Modules\\" 
                     + nameVendor + "\\" 
                     + nameVendorModule + "\\" 
                     + date.Date.ToString("dd.MM.yyyy");
