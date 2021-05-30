@@ -38,14 +38,7 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<AgreedModule, AgreedModuleViewModel>()
-                  .ForMember(nameof(AgreedModuleViewModel.ExistModule), opt => opt
-                  .MapFrom(src => System.IO.File.Exists(src.PathVendorModule)))
-                  .ForMember(nameof(AgreedModuleViewModel.DateOfLetter), opt => opt.MapFrom(src => src.Letter.DateOfLetter))
-                  .ForMember(nameof(AgreedModuleViewModel.NumberLetter), opt => opt.MapFrom(src => src.Letter.NumberLetter))
-                  .ForMember(nameof(AgreedModuleViewModel.VendorId), opt => opt.MapFrom(src => src.VendorModule.VendorId))
-                  .ForMember(nameof(AgreedModuleViewModel.Vendor), opt => opt.MapFrom(src => src.VendorModule.Vendor)));
-                var mapper = new Mapper(config);
+                var mapper = new Mapper(GetMapConfigModelToViewModel());
                 var vm = mapper.Map<List<AgreedModuleViewModel>>(_repo.GetAll()).OrderByDescending(m => m.DateOfLetter);
 
                 return View(vm);
@@ -84,30 +77,27 @@ namespace CpaRepository.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(AgreedModuleViewModel module)
+        public async Task<ActionResult> Create(AgreedModuleViewModel agreedModuleVM)
         {
             try
             {
-                if (module.FileModule != null)
+                if (agreedModuleVM.FileModule != null)
                 {
-                    var nameVendor = _repo.GetNameVendor(module.VendorId);
-                    var nameVendorModule = _repo.GetNameVendorModule(module.VendorModuleId);
-                    var letter = _repo.GetLetterById(module.LetterId);
+                    var nameVendor = _repo.GetNameVendor(agreedModuleVM.VendorId);
+                    var nameVendorModule = _repo.GetNameVendorModule(agreedModuleVM.VendorModuleId);
+                    var letter = _repo.GetLetterById(agreedModuleVM.LetterId);
                     var path = _pathService.GetPathFolderForModule(nameVendor, nameVendorModule, letter.DateOfLetter);
 
-                    var fullPath = await _fileService.SaveFileAsync(module.FileModule, path);
+                    var fullPath = await _fileService.SaveFileAsync(agreedModuleVM.FileModule, path);
 
                     try
                     {
-                        var agreedModule = new AgreedModule()
-                        {
-                            VendorModuleId = module.VendorModuleId,
-                            Changes = module.Changes,
-                            CRC = module.CRC,
-                            PathVendorModule = fullPath,
-                            Version = module.Version,
-                            Letter = letter
-                        };
+                        var config = new MapperConfiguration(cfg => cfg.CreateMap<AgreedModuleViewModel, AgreedModule>()
+                           .ForMember(nameof(AgreedModule.PathVendorModule), opt => opt.MapFrom(src => fullPath))
+                           .ForMember(nameof(AgreedModule.Letter), opt => opt.MapFrom(src => letter)));
+                        var mapper = new Mapper(config);
+                        var agreedModule = mapper.Map<AgreedModule>(agreedModuleVM);
+
                         await _repo.AddAsync(agreedModule);
                         return RedirectToAction(nameof(AgreedModules));
                     }
@@ -142,19 +132,8 @@ namespace CpaRepository.Controllers
                 ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
                 var letters = _repo.GetLettersOneVendor(model.VendorModule.VendorId);
                 ViewBag.LettersId = letters.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NumberLetter }).ToList();
-                var vm = new AgreedModuleViewModel
-                {
-                    Id = model.Id,
-                    Changes = model.Changes,
-                    CRC = model.CRC,
-                    // DateOfAgreement = model.DateOfAgreement,
-                    NumberLetter = model.Letter.NumberLetter,
-                    PathVendorModule = model.PathVendorModule,
-                    VendorId = model.VendorModule.VendorId,
-                    VendorModuleId = model.VendorModuleId,
-                    LetterId = model.Letter.Id,
-                    Version = model.Version
-                };
+                var mapper = new Mapper(GetMapConfigModelToViewModel());
+                var vm = mapper.Map<AgreedModuleViewModel>(model);
 
                 return View(vm);
             }
@@ -224,20 +203,9 @@ namespace CpaRepository.Controllers
             try
             {
                 var model = _repo.GetById(id);
-                var vm = new AgreedModuleViewModel
-                {
-                    Id = model.Id,
-                    Changes = model.Changes,
-                    CRC = model.CRC,
-                    //  DateOfAgreement = model.DateOfAgreement,
-                    NumberLetter = model.Letter.NumberLetter,
-                    PathVendorModule = model.PathVendorModule,
-                    VendorId = model.VendorModule.VendorId,
-                    Vendor = model.VendorModule.Vendor,
-                    VendorModuleId = model.VendorModuleId,
-                    VendorModule = model.VendorModule,
-                    Version = model.Version
-                };
+                var mapper = new Mapper(GetMapConfigModelToViewModel());
+                var vm = mapper.Map<AgreedModuleViewModel>(model);
+
                 return View(vm);
             }
             catch (Exception e)
@@ -312,5 +280,16 @@ namespace CpaRepository.Controllers
                 return RedirectToAction(nameof(AgreedModules));
             }
         }
+        private MapperConfiguration GetMapConfigModelToViewModel()
+        {
+            return new MapperConfiguration(cfg => cfg.CreateMap<AgreedModule, AgreedModuleViewModel>()
+                  .ForMember(nameof(AgreedModuleViewModel.ExistModule), opt => opt
+                  .MapFrom(src => System.IO.File.Exists(src.PathVendorModule)))
+                  .ForMember(nameof(AgreedModuleViewModel.DateOfLetter), opt => opt.MapFrom(src => src.Letter.DateOfLetter))
+                  .ForMember(nameof(AgreedModuleViewModel.NumberLetter), opt => opt.MapFrom(src => src.Letter.NumberLetter))
+                  .ForMember(nameof(AgreedModuleViewModel.VendorId), opt => opt.MapFrom(src => src.VendorModule.VendorId))
+                  .ForMember(nameof(AgreedModuleViewModel.Vendor), opt => opt.MapFrom(src => src.VendorModule.Vendor)));
+        }
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿using CpaRepository.EF;
+﻿using AutoMapper;
+using CpaRepository.EF;
 using CpaRepository.ModelsDb;
 using CpaRepository.Repository;
 using CpaRepository.ViewModel.VendorModule;
@@ -69,15 +70,13 @@ namespace CpaRepository.Controllers
             try
             {
                 var cpaModules = _repo.GetAllCpaModules().Where(p => module.CpaModulesId.Any(l => p.Id == l)).ToList();
-                var newVendorModule = new VendorModule()
-                {
-                    NameModule = module.NameModule,
-                    Description=module.Description,
-                    CpaModules=cpaModules, 
-                    VendorId=module.VendorId
-                    
-                };
-                await _repo.AddAsync(newVendorModule);
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<VendorModuleViewModel, VendorModule>()
+                  .ForMember(nameof(CpaRepository.ModelsDb.VendorModule.CpaModules), opt => opt.MapFrom(src => cpaModules))
+                  .ForMember(nameof(CpaRepository.ModelsDb.VendorModule.Id), opt => opt.MapFrom(src => 0)));
+                var mapper = new Mapper(config);
+                var vendorModule = mapper.Map<VendorModule>(module);
+
+                await _repo.AddAsync(vendorModule);
                 return RedirectToAction(nameof(VendorModule),new { id=module.VendorId});
             }
             catch(Exception e)
@@ -95,17 +94,12 @@ namespace CpaRepository.Controllers
                 var modules = _repo.GetAllCpaModules().ToList();
                 var cpaModule = modules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
                 ViewBag.Vendor = _repo.GetNameVendor(model.VendorId);
-                var vm = new VendorModuleViewModel
-                {
-                    Id = model.Id,
-                    //CpaModulesId = modules.Select(n => n.Id).ToArray(),
-                    CpaModules=cpaModule,
-                    CpaModulesId=model.CpaModules.Select(n=>n.Id).ToArray(),
-                    NameModule = model.NameModule,
-                    Description = model.Description,
-                    VendorId=model.VendorId
-                 
-                };
+                
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<VendorModule, VendorModuleViewModel>()
+                   .ForMember(nameof(VendorModuleViewModel.CpaModulesId), opt => opt.MapFrom(src => src.CpaModules.Select(n=>n.Id).ToArray()))
+                   .ForMember(nameof(VendorModuleViewModel.CpaModules), opt => opt.MapFrom(src => cpaModule)));
+                var mapper = new Mapper(config);
+                var vm = mapper.Map<VendorModuleViewModel>(model);
 
                 return View(vm);
             }
