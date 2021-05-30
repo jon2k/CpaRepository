@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using CpaRepository.EF;
 using CpaRepository.ModelsDb;
 using CpaRepository.Repository;
 using CpaRepository.ViewModel.VendorModule;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;

@@ -1,0 +1,95 @@
+﻿@model IEnumerable<CpaRepository.ViewModel.AgreedModules.AgreedModuleViewModel>
+
+@{
+    ViewData["Title"] = "ActualModules";
+}
+
+<h1>ActualModules</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorModule)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Letter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CRC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Version)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfLetter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PathVendorModule)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PatchLetter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberLetter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Changes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExistModule)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vendor.Describtion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VendorModule.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Letter.NumberLetter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CRC)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Version)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfLetter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PathVendorModule)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PatchLetter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberLetter)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Changes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExistModule)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
