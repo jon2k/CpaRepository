@@ -54,7 +54,11 @@ namespace CpaRepository.Controllers
             try
             {
                 var vendor = _repo.GetAllVendors();
-                ViewBag.VendorId = vendor.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Name }).ToList();
+                ViewBag.VendorId = vendor.Select(n => new SelectListItem
+                {
+                    Value = n.Id.ToString(),
+                    Text = n.Name
+                }).ToList();
                 var vendorModules = _repo.GetVendorModulesOneVendor(vendor.FirstOrDefault().Id);
                 ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem
                 {
@@ -290,6 +294,6 @@ namespace CpaRepository.Controllers
                   .ForMember(nameof(AgreedModuleViewModel.VendorId), opt => opt.MapFrom(src => src.VendorModule.VendorId))
                   .ForMember(nameof(AgreedModuleViewModel.Vendor), opt => opt.MapFrom(src => src.VendorModule.Vendor)));
         }
-        
+
     }
 }

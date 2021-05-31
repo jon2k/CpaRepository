@@ -6,10 +6,17 @@
 
 <h1>ActualModules</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div class="row">
+    <div class="col-md-4">
+        <label class="control-label">Вендор</label>
+        <select class="form-control" asp-items="ViewBag.VendorId" id="vendor"></select>
+    </div>
+    <div class="col-md-4">
+        <label class="control-label">ТПР модуль</label>
+        <select class="form-control" asp-items="ViewBag.CpaModuleId" id="cpaModules"></select>
+    </div>
+</div>
+<table class="table" id="data">
     <thead>
         <tr>
             <th>
@@ -45,51 +52,79 @@
             <th>
                 @Html.DisplayNameFor(model => model.ExistModule)
             </th>
-            <th></th>
+
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Vendor.Describtion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VendorModule.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Letter.NumberLetter)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CRC)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Version)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfLetter)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PathVendorModule)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PatchLetter)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberLetter)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Changes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExistModule)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vendor.Describtion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorModule.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Letter.NumberLetter)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CRC)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Version)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfLetter)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PathVendorModule)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PatchLetter)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberLetter)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Changes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExistModule)
+                </td>
+
+            </tr>
+        }
     </tbody>
 </table>
+
+@section scripts{
+    <script type="text/javascript">
+    $(function () {
+
+        $('#vendor').change(function()
+        {
+            // получаем выбранный id
+            var id = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetVendorModules")/' + id,
+                success: function (data) {
+
+                    // заменяем содержимое присланным частичным представлением
+                    $('#vendorModules').replaceWith(data);
+                }
+            });
+             $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetLetters")/' + id,
+                success: function (data) {
+
+                    // заменяем содержимое присланным частичным представлением
+                    $('#letters').replaceWith(data);
+                }
+            });
+        });
+    })
+    </script>
+}
