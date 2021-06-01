@@ -1,4 +1,5 @@
 ﻿using CpaRepository.Repository;
+using CpaRepository.ViewModel.ActualVendorModule;
 using CpaRepository.ViewModel.AgreedModules;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -44,6 +45,20 @@ namespace CpaRepository.Controllers
           
 
             return View(new List<AgreedModuleViewModel>());
+        }
+        [HttpPost]
+        public ActionResult GetActualModules(DataForFiltr test)
+        {
+            try
+            {
+               // ViewBag.VendorModules = _repo.GetVendorModulesOneVendor(id);
+                return PartialView(new List<AgreedModuleViewModel>());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return PartialView();
+            }
         }
     }
 }

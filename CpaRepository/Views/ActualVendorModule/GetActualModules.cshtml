@@ -1,21 +1,5 @@
 ﻿@model IEnumerable<CpaRepository.ViewModel.AgreedModules.AgreedModuleViewModel>
 
-@{
-    ViewData["Title"] = "ActualModules";
-}
-
-<h1>ActualModules</h1>
-
-<div class="row">
-    <div class="col-md-4">
-        <label class="control-label">Вендор</label>
-        <select class="form-control" asp-items="ViewBag.VendorId" id="vendor"></select>
-    </div>
-    <div class="col-md-4">
-        <label class="control-label">ТПР модуль</label>
-        <select class="form-control" asp-items="ViewBag.CpaModuleId" id="cpaModules"></select>
-    </div>
-</div>
 <table class="table" id="data">
     <thead>
         <tr>
@@ -97,51 +81,3 @@
         }
     </tbody>
 </table>
-
-@section scripts{
-    <script type="text/javascript">
-    $(function () {
-
-        $('#vendor').change(function()
-        {
-            // получаем выбранный id
-            var id = $(this).val();
-            var id2 = $("cpaModules").val();
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("GetActualModules")/',
-                data: {
-                    SelectedVendor: id, 
-                    SelectedCpaModule: id2
-                },
-                success: function (data) {
-
-                    // заменяем содержимое присланным частичным представлением
-                    $('#vendorModules').replaceWith(data);
-                }
-            });
-
-        });
-         $('#cpaModules').change(function()
-        {
-            // получаем выбранный id
-            var id2 = $(this).val();
-            var id = $("vendor").val();
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("GetActualModules")/',
-                data: {
-                    SelectedVendor: id,
-                    SelectedCpaModule: id2
-                },
-                success: function (data) {
-
-                    // заменяем содержимое присланным частичным представлением
-                    $('#vendorModules').replaceWith(data);
-                }
-            });
-
-        });
-    })
-    </script>
-}
