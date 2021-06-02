@@ -16,35 +16,26 @@
         <select class="form-control" asp-items="ViewBag.CpaModuleId" id="cpaModules"></select>
     </div>
 </div>
-<table class="table" id="data">
+<table class="table" id="vendorModules">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Vendor)
+                @Html.DisplayNameFor(model => model.Vendor.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VendorModule)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Letter)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CRC)
+                @Html.DisplayNameFor(model => model.VendorModule.NameModule)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Version)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.CRC)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.DateOfLetter)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PathVendorModule)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PatchLetter)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumberLetter)
+                @Html.DisplayNameFor(model => model.Letter.NumberLetter)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Changes)
@@ -60,31 +51,22 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Vendor.Describtion)
+                    @Html.DisplayFor(modelItem => item.Vendor.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.VendorModule.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Letter.NumberLetter)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CRC)
+                    @Html.DisplayFor(modelItem => item.VendorModule.NameModule)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Version)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.CRC)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.DateOfLetter)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PathVendorModule)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PatchLetter)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NumberLetter)
+                    @Html.DisplayFor(modelItem => item.Letter.NumberLetter)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Changes)
@@ -106,12 +88,12 @@
         {
             // получаем выбранный id
             var id = $(this).val();
-            var id2 = $("cpaModules").val();
+            var id2 = $("#cpaModules").val();
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("GetActualModules")/',
                 data: {
-                    SelectedVendor: id, 
+                    SelectedVendor: id,
                     SelectedCpaModule: id2
                 },
                 success: function (data) {
@@ -126,7 +108,7 @@
         {
             // получаем выбранный id
             var id2 = $(this).val();
-            var id = $("vendor").val();
+            var id = $("#vendor").val();
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("GetActualModules")/',

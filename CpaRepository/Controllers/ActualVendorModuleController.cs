@@ -1,4 +1,6 @@
-﻿using CpaRepository.Repository;
+﻿using AutoMapper;
+using CpaRepository.ModelsDb;
+using CpaRepository.Repository;
 using CpaRepository.ViewModel.ActualVendorModule;
 using CpaRepository.ViewModel.AgreedModules;
 using Microsoft.AspNetCore.Mvc;
@@ -32,33 +34,79 @@ namespace CpaRepository.Controllers
                 Text = n.Name
             }).ToList());
             ViewBag.VendorId = vendors;
-            
+
             var cpaModules = _repo.GetAllCpaModules();
             var cpaModulesList = new List<SelectListItem>();
             cpaModulesList.Add(new SelectListItem() { Value = "0", Text = "Все ТПР модули" });
-            cpaModulesList.AddRange( cpaModules.Select(n => new SelectListItem
+            cpaModulesList.AddRange(cpaModules.Select(n => new SelectListItem
             {
                 Value = n.Id.ToString(),
                 Text = n.NameModule
-            }).ToList());          
+            }).ToList());
             ViewBag.CpaModuleId = cpaModulesList;
-          
 
-            return View(new List<AgreedModuleViewModel>());
+            var agreedModules = _repo.GetAll();
+            var mapper = new Mapper(GetMapConfigModelToViewModel());
+            var vm = mapper.Map<List<AgreedModuleViewModel>>(agreedModules).OrderByDescending(m => m.DateOfLetter);
+
+            return View(vm);
+
+
         }
         [HttpPost]
-        public ActionResult GetActualModules(DataForFiltr test)
+        public ActionResult GetActualModules(DataForFiltr filtr)
         {
             try
             {
-               // ViewBag.VendorModules = _repo.GetVendorModulesOneVendor(id);
-                return PartialView(new List<AgreedModuleViewModel>());
+                IEnumerable<AgreedModule> agreedModules;
+                if (filtr.SelectedCpaModule == 0 && filtr.SelectedVendor == 0)
+                {
+                    agreedModules = _repo.GetAll()
+                        .GroupBy(n => n.VendorModule)
+                        .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).FirstOrDefault());
+                }
+                else if (filtr.SelectedCpaModule == 0 && filtr.SelectedVendor != 0)
+                {
+                    agreedModules = _repo.GetAll()
+                        .Where(v => v.VendorModule.VendorId == filtr.SelectedVendor)
+                        .GroupBy(n => n.VendorModule)
+                        .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).FirstOrDefault());
+                }
+                else if (filtr.SelectedCpaModule != 0 && filtr.SelectedVendor == 0)
+                {
+                    agreedModules = _repo.GetAll()
+                        .Where(m => m.VendorModule.CpaModules.Any(m => m.Id == filtr.SelectedCpaModule))
+                        .GroupBy(n => n.VendorModule)
+                        .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).FirstOrDefault());
+                }
+                else
+                {
+                    agreedModules = _repo.GetAll()
+                        .Where(v => v.VendorModule.VendorId == filtr.SelectedVendor)
+                        .Where(m => m.VendorModule.CpaModules.Any(m => m.Id == filtr.SelectedCpaModule))
+                        .GroupBy(n => n.VendorModule)
+                        .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).FirstOrDefault());
+                }
+                var mapper = new Mapper(GetMapConfigModelToViewModel());
+                var vm = mapper.Map<List<AgreedModuleViewModel>>(agreedModules).OrderByDescending(m => m.DateOfLetter);
+
+                return PartialView(vm);
             }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
                 return PartialView();
             }
+        }
+        private MapperConfiguration GetMapConfigModelToViewModel()
+        {
+            return new MapperConfiguration(cfg => cfg.CreateMap<AgreedModule, AgreedModuleViewModel>()
+                  .ForMember(nameof(AgreedModuleViewModel.ExistModule), opt => opt
+                  .MapFrom(src => System.IO.File.Exists(src.PathVendorModule)))
+                  .ForMember(nameof(AgreedModuleViewModel.DateOfLetter), opt => opt.MapFrom(src => src.Letter.DateOfLetter))
+                  .ForMember(nameof(AgreedModuleViewModel.NumberLetter), opt => opt.MapFrom(src => src.Letter.NumberLetter))
+                  .ForMember(nameof(AgreedModuleViewModel.VendorId), opt => opt.MapFrom(src => src.VendorModule.VendorId))
+                  .ForMember(nameof(AgreedModuleViewModel.Vendor), opt => opt.MapFrom(src => src.VendorModule.Vendor)));
         }
     }
 }
