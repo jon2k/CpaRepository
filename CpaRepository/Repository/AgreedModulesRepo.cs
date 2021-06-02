@@ -39,11 +39,11 @@ namespace CpaRepository.Repository
         }
         public IEnumerable<Letter> GetLettersOneVendor(int id)
         {
-            return _db.Letter.Where(n => n.VendorId == id).ToList();
+            return _db.Letters.Where(n => n.VendorId == id).ToList();
         }
         public Letter GetLetterById(int id)
         {
-            return _db.Letter.Find(id);
+            return _db.Letters.Find(id);
         }
 
 

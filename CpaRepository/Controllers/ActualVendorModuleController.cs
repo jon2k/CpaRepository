@@ -25,32 +25,41 @@ namespace CpaRepository.Controllers
         }
         public IActionResult ActualModules()
         {
-            var vendor = _repo.GetAllVendors();
-            var vendors = new List<SelectListItem>();
-            vendors.Add(new SelectListItem() { Value = "0", Text = "Все вендоры" });
-            vendors.AddRange(vendor.Select(n => new SelectListItem
+            try
             {
-                Value = n.Id.ToString(),
-                Text = n.Name
-            }).ToList());
-            ViewBag.VendorId = vendors;
+                var vendor = _repo.GetAllVendors();
+                var vendors = new List<SelectListItem>();
+                vendors.Add(new SelectListItem() { Value = "0", Text = "Все вендоры" });
+                vendors.AddRange(vendor.Select(n => new SelectListItem
+                {
+                    Value = n.Id.ToString(),
+                    Text = n.Name
+                }).ToList());
+                ViewBag.VendorId = vendors;
 
-            var cpaModules = _repo.GetAllCpaModules();
-            var cpaModulesList = new List<SelectListItem>();
-            cpaModulesList.Add(new SelectListItem() { Value = "0", Text = "Все ТПР модули" });
-            cpaModulesList.AddRange(cpaModules.Select(n => new SelectListItem
+                var cpaModules = _repo.GetAllCpaModules();
+                var cpaModulesList = new List<SelectListItem>();
+                cpaModulesList.Add(new SelectListItem() { Value = "0", Text = "Все ТПР модули" });
+                cpaModulesList.AddRange(cpaModules.Select(n => new SelectListItem
+                {
+                    Value = n.Id.ToString(),
+                    Text = n.NameModule
+                }).ToList());
+                ViewBag.CpaModuleId = cpaModulesList;
+
+                var agreedModules = _repo.GetAll()
+                            .GroupBy(n => n.VendorModule)
+                            .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).FirstOrDefault());
+                var mapper = new Mapper(GetMapConfigModelToViewModel());
+                var vm = mapper.Map<List<AgreedModuleViewModel>>(agreedModules).OrderByDescending(m => m.DateOfLetter);
+
+                return View(vm);
+            }
+            catch(Exception e)
             {
-                Value = n.Id.ToString(),
-                Text = n.NameModule
-            }).ToList());
-            ViewBag.CpaModuleId = cpaModulesList;
-
-            var agreedModules = _repo.GetAll();
-            var mapper = new Mapper(GetMapConfigModelToViewModel());
-            var vm = mapper.Map<List<AgreedModuleViewModel>>(agreedModules).OrderByDescending(m => m.DateOfLetter);
-
-            return View(vm);
-
+                _logger.LogError(e.Message);
+                return RedirectToAction(nameof(Index), "HomeController");
+            }
 
         }
         [HttpPost]
