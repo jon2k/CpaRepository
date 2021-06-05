@@ -1,0 +1,45 @@
+﻿@model CpaRepository.ModelsDb.VendorModule
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>Удаление модуля  @Model.NameModule вендора @ViewBag.Vendor</h1>
+
+<h3>AВы уверены, что хотите удалить модуль?</h3>
+<div>
+    <h4>VendorModule</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Vendor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Vendor.Name)
+        </dd class>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NameModule)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NameModule)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

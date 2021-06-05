@@ -105,18 +105,18 @@ namespace CpaRepository.EF
             modelBuilder.Entity<Letter>().HasData(
            new Letter[]
            {
-                    new Letter{Id=1, VendorId=1, NumberLetter="123", DateOfLetter=DateTime.Now, PathLetter="D:\\test.pdf"   },
-                    new Letter{Id=2, VendorId=1, NumberLetter="456", DateOfLetter=DateTime.Now, PathLetter="D:\\test.pdf"  },
-                    new Letter{Id=3, VendorId=1, NumberLetter="789", DateOfLetter=DateTime.Now, PathLetter="D:\\test.pdf" },
-                    new Letter{Id=4, VendorId=1, NumberLetter="321", DateOfLetter=DateTime.Now, PathLetter="D:\\test.pdf"},
-                    new Letter{Id=5, VendorId=2, NumberLetter="987", DateOfLetter=DateTime.Now, PathLetter="D:\\test.pdf"},
-                    new Letter{Id=6, VendorId=2, NumberLetter="654", DateOfLetter=DateTime.Now,  PathLetter="D:\\test.pdf"},
-                    new Letter{Id=7, VendorId=3, NumberLetter="123", DateOfLetter=DateTime.Now, PathLetter="D:\\test.pdf"   },
-                    new Letter{Id=8, VendorId=3, NumberLetter="456", DateOfLetter=DateTime.Now, PathLetter="D:\\test.pdf"  },
-                    new Letter{Id=9, VendorId=3, NumberLetter="789", DateOfLetter=DateTime.Now, PathLetter="D:\\test.pdf" },
-                    new Letter{Id=10, VendorId=4, NumberLetter="321", DateOfLetter=DateTime.Now, PathLetter="D:\\test.pdf"},
-                    new Letter{Id=11, VendorId=4, NumberLetter="987", DateOfLetter=DateTime.Now, PathLetter="D:\\test.pdf"},
-                    new Letter{Id=12, VendorId=4, NumberLetter="654", DateOfLetter=DateTime.Now,  PathLetter="D:\\test.pdf"}
+                    new Letter{Id=1, VendorId=1, NumberLetter="123", DateOfLetter=new DateTime(2021,1,1), PathLetter="D:\\test.pdf"   },
+                    new Letter{Id=2, VendorId=1, NumberLetter="456", DateOfLetter=new DateTime(2021,2,1), PathLetter="D:\\test.pdf"  },
+                    new Letter{Id=3, VendorId=1, NumberLetter="789", DateOfLetter=new DateTime(2021,3,1), PathLetter="D:\\test.pdf" },
+                    new Letter{Id=4, VendorId=1, NumberLetter="321", DateOfLetter=new DateTime(2021,4,1), PathLetter="D:\\test.pdf"},
+                    new Letter{Id=5, VendorId=2, NumberLetter="987", DateOfLetter=new DateTime(2021,5,1), PathLetter="D:\\test.pdf"},
+                    new Letter{Id=6, VendorId=2, NumberLetter="654", DateOfLetter=new DateTime(2021,5,5),  PathLetter="D:\\test.pdf"},
+                    new Letter{Id=7, VendorId=3, NumberLetter="123", DateOfLetter=new DateTime(2021,5,7), PathLetter="D:\\test.pdf"   },
+                    new Letter{Id=8, VendorId=3, NumberLetter="456", DateOfLetter=new DateTime(2021,6,1), PathLetter="D:\\test.pdf"  },
+                    new Letter{Id=9, VendorId=3, NumberLetter="789", DateOfLetter=new DateTime(2021,4,8), PathLetter="D:\\test.pdf" },
+                    new Letter{Id=10, VendorId=4, NumberLetter="321", DateOfLetter=new DateTime(2021,2,8), PathLetter="D:\\test.pdf"},
+                    new Letter{Id=11, VendorId=4, NumberLetter="987", DateOfLetter=new DateTime(2021,2,8), PathLetter="D:\\test.pdf"},
+                    new Letter{Id=12, VendorId=4, NumberLetter="654", DateOfLetter=new DateTime(2020,1,8),  PathLetter="D:\\test.pdf"}
 
            });
             modelBuilder.Entity<AgreedModule>().HasData(
@@ -126,20 +126,20 @@ namespace CpaRepository.EF
                     new AgreedModule{Id=2, VendorModuleId=1, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=2   },
                     new AgreedModule{Id=3, VendorModuleId=1, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=2  },
                     new AgreedModule{Id=4, VendorModuleId=1, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=3 },
-                    new AgreedModule{Id=5, VendorModuleId=2, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=5 },
-                    new AgreedModule{Id=6, VendorModuleId=2, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=6 },
-                    new AgreedModule{Id=7, VendorModuleId=3, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=1 },
+                    new AgreedModule{Id=5, VendorModuleId=2, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=3 },
+                    new AgreedModule{Id=6, VendorModuleId=2, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=2 },
+                    new AgreedModule{Id=7, VendorModuleId=3, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=3 },
                     new AgreedModule{Id=8, VendorModuleId=3, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=2   },
-                    new AgreedModule{Id=9, VendorModuleId=3, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=2  },
-                    new AgreedModule{Id=10, VendorModuleId=4, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=3 },
-                    new AgreedModule{Id=11, VendorModuleId=4, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=5 },
-                    new AgreedModule{Id=12, VendorModuleId=4, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=1 },
+                    new AgreedModule{Id=9, VendorModuleId=3, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=1  },
+                    new AgreedModule{Id=10, VendorModuleId=4, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=1 },
+                    new AgreedModule{Id=11, VendorModuleId=4, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=2 },
+                    new AgreedModule{Id=12, VendorModuleId=4, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=3 },
                     new AgreedModule{Id=13, VendorModuleId=5, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=1 },
-                    new AgreedModule{Id=14, VendorModuleId=5, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=2   },
-                    new AgreedModule{Id=15, VendorModuleId=5, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=2  },
-                    new AgreedModule{Id=16, VendorModuleId=6, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=3 },
-                    new AgreedModule{Id=17, VendorModuleId=6, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=5 },
-                    new AgreedModule{Id=18, VendorModuleId=6, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=1 }
+                    new AgreedModule{Id=14, VendorModuleId=5, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=5   },
+                    new AgreedModule{Id=15, VendorModuleId=5, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=6  },
+                    new AgreedModule{Id=16, VendorModuleId=6, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=5 },
+                    new AgreedModule{Id=17, VendorModuleId=6, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=6 },
+                    new AgreedModule{Id=18, VendorModuleId=6, Changes="test", CRC="123123123", Version="1.2.1", PathVendorModule="D:\\test.rar", LetterId=6 }
 
            });
         }
