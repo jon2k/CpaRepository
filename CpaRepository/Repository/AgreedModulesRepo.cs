@@ -13,7 +13,10 @@ namespace CpaRepository.Repository
         {
 
         }    
-
+        public IEnumerable<AgreedModule> GetAgreedModulesOneVendor(int id)
+        {
+            return _db.AgreedModules.Where(n => n.VendorModule.VendorId == id).ToList();
+        }
         public IEnumerable<CpaModule> GetAllCpaModules()
         {
             return _db.CpaModules.ToList();

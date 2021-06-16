@@ -23,7 +23,7 @@ namespace CpaRepository.Controllers
             _repo = context;
             _logger = logger;
         }
-        public IActionResult ActualModules()
+        public IActionResult ActualModules(int id = 0)
         {
             try
             {
@@ -32,10 +32,11 @@ namespace CpaRepository.Controllers
                 var vendor = _repo.GetAllVendors();
                 var vendors = new List<SelectListItem>();
                 vendors.Add(new SelectListItem() { Value = "0", Text = "Все вендоры" });
-                vendors.AddRange(vendor.Select(n => new SelectListItem
+                vendors.AddRange(vendor.Select((n, i) => new SelectListItem
                 {
                     Value = n.Id.ToString(),
-                    Text = n.Name
+                    Text = n.Name,
+                    Selected = i + 1 == id ? true : false
                 }).ToList());
                 ViewBag.VendorId = vendors;
 
@@ -48,16 +49,25 @@ namespace CpaRepository.Controllers
                     Text = n.NameModule
                 }).ToList());
                 ViewBag.CpaModuleId = cpaModulesList;
-
-                var agreedModules = _repo.GetAll()
-                            .GroupBy(n => n.VendorModule)
-                            .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).FirstOrDefault());
+                IEnumerable<AgreedModule> agreedModules;
+                if (id == 0)
+                {
+                    agreedModules = _repo.GetAll()
+                                .GroupBy(n => n.VendorModule)
+                                .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).FirstOrDefault());
+                }
+                else
+                {
+                    agreedModules = _repo.GetAgreedModulesOneVendor(id)
+                                .GroupBy(n => n.VendorModule)
+                                .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).FirstOrDefault());
+                }
                 var mapper = new Mapper(GetMapConfigModelToViewModel());
                 var vm = mapper.Map<List<ModuleViewModel>>(agreedModules).OrderByDescending(m => m.DateOfLetter);
 
-                return View("Modules",vm);
+                return View("Modules", vm);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e.Message);
                 return RedirectToAction(nameof(Index), "HomeController");
@@ -92,7 +102,7 @@ namespace CpaRepository.Controllers
 
                 var agreedModules = _repo.GetAll()
                             .GroupBy(n => n.VendorModule)
-                            .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).Skip(1)).SelectMany(n=>n);
+                            .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).Skip(1)).SelectMany(n => n);
                 var mapper = new Mapper(GetMapConfigModelToViewModel());
                 var vm = mapper.Map<List<ModuleViewModel>>(agreedModules).OrderByDescending(m => m.DateOfLetter);
 
@@ -150,7 +160,7 @@ namespace CpaRepository.Controllers
                         agreedModules = _repo.GetAll()
                             .GroupBy(n => n.VendorModule)
                             .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).Skip(1))
-                            .SelectMany(n=>n);
+                            .SelectMany(n => n);
                     }
                     else if (filtr.SelectedCpaModule == 0 && filtr.SelectedVendor != 0)
                     {
@@ -158,7 +168,7 @@ namespace CpaRepository.Controllers
                             .Where(v => v.VendorModule.VendorId == filtr.SelectedVendor)
                             .GroupBy(n => n.VendorModule)
                             .Select(g => g.OrderByDescending(d => d.Letter.DateOfLetter).Skip(1))
-                            .SelectMany(n=>n);
+                            .SelectMany(n => n);
                     }
                     else if (filtr.SelectedCpaModule != 0 && filtr.SelectedVendor == 0)
                     {
@@ -190,7 +200,7 @@ namespace CpaRepository.Controllers
             }
         }
         [HttpPost]
-      
+
         public IActionResult DownloadFile(int id)
         {
             try

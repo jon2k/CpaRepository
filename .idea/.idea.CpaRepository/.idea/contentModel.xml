@@ -21,13 +21,15 @@
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="Controllers" t="Include">
-          <e p="ActualVendorModuleController.cs" t="Include" />
-          <e p="AgreedModuleController.cs" t="Include" />
-          <e p="CpaModuleController.cs" t="Include" />
+          <e p="Admin" t="Include">
+            <e p="AgreedModulesController.cs" t="Include" />
+            <e p="CpaModulesController.cs" t="Include" />
+            <e p="LettersController.cs" t="Include" />
+            <e p="VendorModuleController.cs" t="Include" />
+            <e p="VendorsController.cs" t="Include" />
+          </e>
           <e p="HomeController.cs" t="Include" />
-          <e p="LetterController.cs" t="Include" />
-          <e p="VendorController.cs" t="Include" />
-          <e p="VendorModuleController.cs" t="Include" />
+          <e p="ModulesController.cs" t="Include" />
         </e>
         <e p="Cpa.db" t="Include" />
         <e p="CpaRepository.csproj" t="IncludeRecursive" />
@@ -44,10 +46,8 @@
         <e p="ModelsDb" t="Include">
           <e p="AgreedModule.cs" t="Include" />
           <e p="CpaModule.cs" t="Include" />
-          <e p="CpaSubModule.cs" t="Include" />
           <e p="EntityBase.cs" t="Include" />
           <e p="Letter.cs" t="Include" />
-          <e p="RelationCpaModuleWithVendorModule.cs" t="Include" />
           <e p="Vendor.cs" t="Include" />
           <e p="VendorModule.cs" t="Include" />
         </e>
@@ -62,6 +62,14 @@
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
           <e p="launchSettings.json" t="Include" />
+          <e p="PublishProfiles" t="Include">
+            <e p="CpaRepository20210604233912 - Web Deploy.pubxml" t="Include" />
+          </e>
+          <e p="ServiceDependencies" t="Include">
+            <e p="CpaRepository20210604233912 - Web Deploy" t="Include">
+              <e p="profile.arm.json" t="Include" />
+            </e>
+          </e>
         </e>
         <e p="Repository" t="Include">
           <e p="AgreedModulesRepo.cs" t="Include" />
@@ -88,6 +96,10 @@
           <e p="Letter" t="Include">
             <e p="LetterViewModel.cs" t="Include" />
           </e>
+          <e p="Module" t="Include">
+            <e p="DataForFiltr.cs" t="Include" />
+            <e p="ModuleViewModel.cs" t="Include" />
+          </e>
           <e p="VendorModule" t="Include">
             <e p="VendorModuleViewModel.cs" t="Include" />
           </e>
@@ -95,10 +107,7 @@
         <e p="Views" t="Include">
           <e p="_ViewImports.cshtml" t="Include" />
           <e p="_ViewStart.cshtml" t="Include" />
-          <e p="ActualVendorModule" t="Include">
-            <e p="ActualModules.cshtml" t="Include" />
-          </e>
-          <e p="AgreedModule" t="Include">
+          <e p="AgreedModules" t="Include">
             <e p="AgreedModules.cshtml" t="Include" />
             <e p="Create.cshtml" t="Include" />
             <e p="Delete.cshtml" t="Include" />
@@ -106,7 +115,7 @@
             <e p="GetLetters.cshtml" t="Include" />
             <e p="GetVendorModules.cshtml" t="Include" />
           </e>
-          <e p="CpaModule" t="Include">
+          <e p="CpaModules" t="Include">
             <e p="CpaModule.cshtml" t="Include" />
             <e p="Create.cshtml" t="Include" />
             <e p="Delete.cshtml" t="Include" />
@@ -117,28 +126,32 @@
             <e p="Index.cshtml" t="Include" />
             <e p="Privacy.cshtml" t="Include" />
           </e>
-          <e p="Letter" t="Include">
+          <e p="Letters" t="Include">
             <e p="Create.cshtml" t="Include" />
             <e p="Delete.cshtml" t="Include" />
             <e p="Edit.cshtml" t="Include" />
             <e p="Letters.cshtml" t="Include" />
+          </e>
+          <e p="Modules" t="Include">
+            <e p="GetModules.cshtml" t="Include" />
+            <e p="Modules.cshtml" t="Include" />
           </e>
           <e p="Shared" t="Include">
             <e p="_Layout.cshtml" t="Include" />
             <e p="_ValidationScriptsPartial.cshtml" t="Include" />
             <e p="Error.cshtml" t="Include" />
           </e>
-          <e p="Vendor" t="Include">
-            <e p="Create.cshtml" t="Include" />
-            <e p="Delete.cshtml" t="Include" />
-            <e p="Edit.cshtml" t="Include" />
-            <e p="Vendor.cshtml" t="Include" />
-          </e>
-          <e p="VendorModule" t="Include">
+          <e p="VendorModules" t="Include">
             <e p="Create.cshtml" t="Include" />
             <e p="Delete.cshtml" t="Include" />
             <e p="Edit.cshtml" t="Include" />
             <e p="VendorModule.cshtml" t="Include" />
+          </e>
+          <e p="Vendors" t="Include">
+            <e p="Create.cshtml" t="Include" />
+            <e p="Delete.cshtml" t="Include" />
+            <e p="Edit.cshtml" t="Include" />
+            <e p="Vendor.cshtml" t="Include" />
           </e>
         </e>
         <e p="wwwroot" t="Include">
@@ -228,8 +241,21 @@
               </e>
             </e>
             <e p="Modules" t="Include">
+              <e p="Emicon" t="Include">
+                <e p="Oip" t="Include">
+                  <e p="05.05.2021" t="Include">
+                    <e p="skills.zip" t="Include" />
+                  </e>
+                  <e p="14.05.2021" t="Include">
+                    <e p="tarreference-master.zip" t="Include" />
+                  </e>
+                </e>
+              </e>
               <e p="Prosoft" t="Include">
                 <e p="OipLib" t="Include">
+                  <e p="01.03.2021" t="Include">
+                    <e p="skills.zip" t="Include" />
+                  </e>
                   <e p="22.05.2021" t="Include">
                     <e p="skills.zip" t="Include" />
                   </e>
