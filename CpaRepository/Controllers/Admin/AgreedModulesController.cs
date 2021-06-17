@@ -71,6 +71,7 @@ namespace CpaRepository.Controllers
                     Value = n.Id.ToString(),
                     Text = n.NumberLetter
                 }).ToList();
+               
                 return View();
             }
             catch (Exception e)
@@ -103,6 +104,12 @@ namespace CpaRepository.Controllers
                         var agreedModule = mapper.Map<AgreedModule>(agreedModuleVM);
 
                         await _repo.AddAsync(agreedModule);
+                        _logger.LogInformation($"Добавлен согласованный модуль. " +
+                            $"Вендор - {agreedModule.VendorModule.Vendor.Name}, " +
+                            $"Модуль - {agreedModule.VendorModule.NameModule}, " +
+                            $"Версия - {agreedModule.Version}, " +
+                            $"CRC - {agreedModule.CRC}, " +
+                            $"Время - {DateTime.Now}");
                         return RedirectToAction(nameof(AgreedModules));
                     }
                     catch (Exception e)

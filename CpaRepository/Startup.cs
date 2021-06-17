@@ -13,6 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using CpaRepository.Logger;
+using System.IO;
 
 namespace CpaRepository
 {
@@ -41,7 +44,7 @@ namespace CpaRepository
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -66,6 +69,8 @@ namespace CpaRepository
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logger.txt"));
+            var logger = loggerFactory.CreateLogger("FileLogger");
         }
     }
 }

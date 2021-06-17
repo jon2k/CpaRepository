@@ -33,7 +33,7 @@ namespace CpaRepository.Controllers
                                  .OrderByDescending(d => d.Letter.DateOfLetter)
                                  .Take(5);
                 var mapper = new Mapper(GetMapConfigModelToViewModel());
-                var vm = mapper.Map<List<ModuleViewModel>>(agreedModules).OrderByDescending(m => m.DateOfLetter);
+                var vm = mapper.Map<List<ModuleViewModel>>(agreedModules).OrderByDescending(m => m.DateOfLetter);          
                 return View(vm);
             }
             catch (Exception e)

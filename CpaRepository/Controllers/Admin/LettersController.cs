@@ -83,6 +83,9 @@ namespace CpaRepository.Controllers
                         var letter = mapper.Map<Letter>(letterViewModel);
 
                         await _repo.AddAsync(letter);
+                        _logger.LogInformation($"Добавлено письмо. " +
+                           $"Вендор - {letter.Vendor.Name}, " +
+                           $"Время - {DateTime.Now}");
                         return RedirectToAction(nameof(Letters));
                     }
                     catch (Exception e)
