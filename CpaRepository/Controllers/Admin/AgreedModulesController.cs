@@ -91,7 +91,7 @@ namespace CpaRepository.Controllers
                     var nameVendor = _repo.GetNameVendor(agreedModuleVM.VendorId);
                     var nameVendorModule = _repo.GetNameVendorModule(agreedModuleVM.VendorModuleId);
                     var letter = _repo.GetLetterById(agreedModuleVM.LetterId);
-                    var path = _pathService.GetPathFolderForModule(nameVendor, nameVendorModule, letter.DateOfLetter);
+                    var path = _pathService.GetPathFolderForModule(_appEnvironment.WebRootPath, nameVendor, nameVendorModule, letter.DateOfLetter);
 
                     var fullPath = await _fileService.SaveFileAsync(agreedModuleVM.FileModule, path);
 
@@ -169,7 +169,7 @@ namespace CpaRepository.Controllers
                     || module.LetterId != moduleDb.Letter.Id || module.VendorModuleId != moduleDb.VendorModuleId))
                 {
                     // Перемещаем файл в другую папку.
-                    var pathFolder = _pathService.GetPathFolderForModule(nameVendor, nameVendorModule, letter.DateOfLetter);
+                    var pathFolder = _pathService.GetPathFolderForModule(_appEnvironment.WebRootPath, nameVendor, nameVendorModule, letter.DateOfLetter);
                     fullPath = pathFolder + "\\" + moduleDb.PathVendorModule.Split('\\').Last();
                     _fileService.Move(moduleDb.PathVendorModule, fullPath);
                 }
@@ -177,7 +177,7 @@ namespace CpaRepository.Controllers
                 {
                     // Добавляем файл.
                     _fileService.DeleteFile(moduleDb.PathVendorModule);
-                    var pathFolder = _pathService.GetPathFolderForModule(nameVendor, nameVendorModule, letter.DateOfLetter);
+                    var pathFolder = _pathService.GetPathFolderForModule(_appEnvironment.WebRootPath, nameVendor, nameVendorModule, letter.DateOfLetter);
                     fullPath = await _fileService.SaveFileAsync(module.FileModule, pathFolder);
                 }
 

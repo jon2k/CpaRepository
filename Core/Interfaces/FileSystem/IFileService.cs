@@ -1,8 +1,4 @@
-﻿using CpaRepository.ModelsDb;
-using CpaRepository.ViewModel.AgreedModules;
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 namespace CpaRepository.Service

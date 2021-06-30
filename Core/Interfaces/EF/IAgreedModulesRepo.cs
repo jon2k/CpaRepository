@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CpaRepository.Repository
 {
-    interface IAgreedModulesRepo : IRepository<AgreedModule>
+    public interface IAgreedModulesRepo : IRepository<AgreedModule>
     {
         IEnumerable<Vendor> GetAllVendors();
         string GetNameVendor(int id);

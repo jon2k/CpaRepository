@@ -12,3 +12,6 @@ Hosting environment: Development
 Content root path: D:\Project VS\CpaRepository\CpaRepository
 Добавлено письмо Вендор - Shneider Electric, Время - 17.06.2021 22:55:17
 Добавлен согласованный модуль Вендор - B+R, Модуль - Oip, Версия - 66, CRC - 66, Время - 17.06.2021 22:55:51
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project VS\CpaRepository\CpaRepository

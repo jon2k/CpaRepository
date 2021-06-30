@@ -37,8 +37,11 @@
           <e p="ApplicationContext.cs" t="Include" />
         </e>
         <e p="Logger" t="Include">
-          <e p="TxtLogger.cs" t="Include" />
+          <e p="FileLogger.cs" t="Include" />
+          <e p="FileLoggerExtensions.cs" t="Include" />
+          <e p="FileLoggerProvider.cs" t="Include" />
         </e>
+        <e p="logger.txt" t="Include" />
         <e p="Models" t="Include">
           <e p="AddedModule.cs" t="Include" />
           <e p="ErrorViewModel.cs" t="Include" />
@@ -158,6 +161,7 @@
           <e p="css" t="Include">
             <e p="site.css" t="Include" />
           </e>
+          <e p="emicon_logo_2.gif" t="Include" />
           <e p="favicon.ico" t="Include" />
           <e p="ico.ico" t="Include" />
           <e p="js" t="Include">
@@ -216,7 +220,9 @@
               <e p="LICENSE.txt" t="Include" />
             </e>
           </e>
+          <e p="logo.svg" t="Include" />
           <e p="logo_ru.png" t="Include" />
+          <e p="prosoft_logo.png" t="Include" />
           <e p="Root" t="Include">
             <e p="Letters" t="Include">
               <e p="B+R" t="Include">
@@ -234,6 +240,11 @@
                   <e p="Новокшонов Евгений Анатольевич.pdf" t="Include" />
                 </e>
               </e>
+              <e p="Shneider Electric" t="Include">
+                <e p="17.06.2021" t="Include">
+                  <e p="чек.pdf" t="Include" />
+                </e>
+              </e>
               <e p="Siemens" t="Include">
                 <e p="04.05.2021" t="Include">
                   <e p="menju2021.PDF" t="Include" />
@@ -241,6 +252,13 @@
               </e>
             </e>
             <e p="Modules" t="Include">
+              <e p="B+R" t="Include">
+                <e p="Oip" t="Include">
+                  <e p="08.01.2020" t="Include">
+                    <e p="skills.zip" t="Include" />
+                  </e>
+                </e>
+              </e>
               <e p="Emicon" t="Include">
                 <e p="Oip" t="Include">
                   <e p="05.05.2021" t="Include">
@@ -253,6 +271,9 @@
               </e>
               <e p="Prosoft" t="Include">
                 <e p="OipLib" t="Include">
+                  <e p="01.02.2021" t="Include">
+                    <e p="skills.zip" t="Include" />
+                  </e>
                   <e p="01.03.2021" t="Include">
                     <e p="skills.zip" t="Include" />
                   </e>
@@ -263,6 +284,8 @@
               </e>
             </e>
           </e>
+          <e p="se.png" t="Include" />
+          <e p="siemens.png" t="Include" />
         </e>
       </e>
       <e p="CpaRepository.sln" t="IncludeFlat" />

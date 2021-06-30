@@ -72,7 +72,7 @@ namespace CpaRepository.Controllers
                 if (letterViewModel.FileLetter != null)
                 {
                     var nameVendor = _repo.GetNameVendor(letterViewModel.VendorId);
-                    var pathFolder = _pathService.GetPathFolderForLetter(nameVendor, letterViewModel.DateOfLetter);
+                    var pathFolder = _pathService.GetPathFolderForLetter(_appEnvironment.WebRootPath, nameVendor, letterViewModel.DateOfLetter);
                     var fullPath = await _fileService.SaveFileAsync(letterViewModel.FileLetter, pathFolder);
                     try
                     {
@@ -138,7 +138,7 @@ namespace CpaRepository.Controllers
                 if (letterViewModel.FileLetter == null && (letterViewModel.VendorId != letterDb.VendorId || letterViewModel.DateOfLetter != letterDb.DateOfLetter))
                 {
                     // Перемещаем файл в другую папку.
-                    var pathFolder = _pathService.GetPathFolderForLetter(nameVendor, letterViewModel.DateOfLetter);
+                    var pathFolder = _pathService.GetPathFolderForLetter(_appEnvironment.WebRootPath, nameVendor, letterViewModel.DateOfLetter);
                     fullPath = pathFolder + "\\" + letterDb.PathLetter.Split('\\').Last();
                     _fileService.Move(letterDb.PathLetter, fullPath);
                 }
@@ -147,7 +147,7 @@ namespace CpaRepository.Controllers
                     // Добавляем файл.
                     _fileService.DeleteFile(letterDb.PathLetter);
                     //  var nameVendor = _repo.GetNameVendor(letter.VendorId);
-                    var pathFolder = _pathService.GetPathFolderForLetter(nameVendor, letterViewModel.DateOfLetter);
+                    var pathFolder = _pathService.GetPathFolderForLetter(_appEnvironment.WebRootPath, nameVendor, letterViewModel.DateOfLetter);
                     fullPath = await _fileService.SaveFileAsync(letterViewModel.FileLetter, pathFolder);
                 }
                 try
