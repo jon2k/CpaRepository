@@ -15,33 +15,39 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
+using Web.Mediatr.AgreedModulesController;
+using Web.Mediatr.Query;
 
 namespace CpaRepository.Controllers
 {
     public class AgreedModulesController : Controller
     {
+        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
         private readonly ILogger<VendorModuleController> _logger;
-        private AgreedModulesRepo _repo;
+        private IAgreedModulesRepo _repo;
         private IWebHostEnvironment _appEnvironment;
         private IFileService _fileService;
         private IPathService _pathService;
-        public AgreedModulesController(AgreedModulesRepo context, ILogger<VendorModuleController> logger,
+        public AgreedModulesController(IMapper mapper, IMediator mediator, IAgreedModulesRepo context, ILogger<VendorModuleController> logger,
             IWebHostEnvironment appEnvironment, IFileService fileService, IPathService pathService)
         {
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _repo = context;
             _logger = logger;
             _appEnvironment = appEnvironment;
             _fileService = fileService;
             _pathService = pathService;
         }
-        public ActionResult AgreedModules()
+        public async Task<ActionResult> AgreedModules()
         {
             try
             {
-                var mapper = new Mapper(GetMapConfigModelToViewModel());
-                var vm = mapper.Map<List<AgreedModuleViewModel>>(_repo.GetAll()).OrderByDescending(m => m.DateOfLetter);
-
-                return View(vm);
+                var agreedModules = await _mediator.Send(new GetAgreedModulesQuery());
+                var agreedModulesVM = _mapper.Map<IEnumerable<AgreedModuleViewModel>>(agreedModules);
+                return View(agreedModulesVM);
             }
             catch (Exception e)
             {
@@ -49,30 +55,12 @@ namespace CpaRepository.Controllers
                 return RedirectToAction(nameof(Index), "AgreedModuleController");
             }
         }
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             try
             {
-                var vendor = _repo.GetAllVendors();
-                ViewBag.VendorId = vendor.Select(n => new SelectListItem
-                {
-                    Value = n.Id.ToString(),
-                    Text = n.Name
-                }).ToList();
-                var vendorModules = _repo.GetVendorModulesOneVendor(vendor.FirstOrDefault().Id);
-                ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem
-                {
-                    Value = n.Id.ToString(),
-                    Text = n.NameModule
-                }).ToList();
-                var letters = _repo.GetLettersOneVendor(vendor.FirstOrDefault().Id);
-                ViewBag.LettersId = letters.Select(n => new SelectListItem
-                {
-                    Value = n.Id.ToString(),
-                    Text = n.NumberLetter
-                }).ToList();
-               
-                return View();
+                var vm = await _mediator.Send(new GetVmForAgreedModuleCreateQuery());
+                return View(vm);
             }
             catch (Exception e)
             {
@@ -81,42 +69,30 @@ namespace CpaRepository.Controllers
             }
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(AgreedModuleViewModel agreedModuleVM)
         {
             try
             {
                 if (agreedModuleVM.FileModule != null)
                 {
-                    var nameVendor = _repo.GetNameVendor(agreedModuleVM.VendorId);
-                    var nameVendorModule = _repo.GetNameVendorModule(agreedModuleVM.VendorModuleId);
-                    var letter = _repo.GetLetterById(agreedModuleVM.LetterId);
-                    var path = _pathService.GetPathFolderForModule(_appEnvironment.WebRootPath, nameVendor, nameVendorModule, letter.DateOfLetter);
-
-                    var fullPath = await _fileService.SaveFileAsync(agreedModuleVM.FileModule, path);
-
-                    try
+                    var agreedModule = _mapper.Map<AgreedModule>(agreedModuleVM);
+                    var module = await _mediator.Send(new EditAgreedModuleCommand()
                     {
-                        var config = new MapperConfiguration(cfg => cfg.CreateMap<AgreedModuleViewModel, AgreedModule>()
-                           .ForMember(nameof(AgreedModule.PathVendorModule), opt => opt.MapFrom(src => fullPath))
-                           .ForMember(nameof(AgreedModule.Letter), opt => opt.MapFrom(src => letter)));
-                        var mapper = new Mapper(config);
-                        var agreedModule = mapper.Map<AgreedModule>(agreedModuleVM);
-
-                        await _repo.AddAsync(agreedModule);
+                        AgreedModule = agreedModule,
+                        FileModule = agreedModuleVM.FileModule
+                    });
+                    if (module != null)
+                    {
                         _logger.LogInformation($"Добавлен согласованный модуль. " +
-                            $"Вендор - {agreedModule.VendorModule.Vendor.Name}, " +
-                            $"Модуль - {agreedModule.VendorModule.NameModule}, " +
-                            $"Версия - {agreedModule.Version}, " +
-                            $"CRC - {agreedModule.CRC}, " +
-                            $"Время - {DateTime.Now}");
+                           $"Вендор - {agreedModule.VendorModule.Vendor.Name}, " +
+                           $"Модуль - {agreedModule.VendorModule.NameModule}, " +
+                           $"Версия - {agreedModule.Version}, " +
+                           $"CRC - {agreedModule.CRC}, " +
+                           $"Время - {DateTime.Now}");
                         return RedirectToAction(nameof(AgreedModules));
                     }
-                    catch (Exception e)
+                    else
                     {
-                        _logger.LogError(e.Message);
-                        // Удаляем файл, если запись в БД не прошла
-                        _fileService.DeleteFile(fullPath);
                         return View();
                     }
                 }
@@ -132,20 +108,11 @@ namespace CpaRepository.Controllers
                 return View();
             }
         }
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             try
             {
-                var model = _repo.GetById(id);
-                var vendor = _repo.GetAllVendors();
-                ViewBag.VendorId = vendor.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Name }).ToList();
-                var vendorModules = _repo.GetVendorModulesOneVendor(model.VendorModule.VendorId);
-                ViewBag.VendorModuleId = vendorModules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();
-                var letters = _repo.GetLettersOneVendor(model.VendorModule.VendorId);
-                ViewBag.LettersId = letters.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NumberLetter }).ToList();
-                var mapper = new Mapper(GetMapConfigModelToViewModel());
-                var vm = mapper.Map<AgreedModuleViewModel>(model);
-
+                var vm = await _mediator.Send(new GetVmForAgreedModuleEditQuery() { Id = id });
                 return View(vm);
             }
             catch (Exception e)
@@ -160,47 +127,14 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                var moduleDb = _repo.GetById(module.Id);
-                var nameVendor = _repo.GetNameVendor(module.VendorId);
-                var nameVendorModule = _repo.GetNameVendorModule(module.VendorModuleId);
-                var letter = _repo.GetLetterById(module.LetterId);
-                var fullPath = moduleDb.PathVendorModule;
-                if (module.FileModule == null && (module.VendorId != moduleDb.VendorModule.Vendor.Id
-                    || module.LetterId != moduleDb.Letter.Id || module.VendorModuleId != moduleDb.VendorModuleId))
+                var agreedModule = _mapper.Map<AgreedModule>(module);
+                var res= await _mediator.Send(new EditAgreedModuleCommand()
                 {
-                    // Перемещаем файл в другую папку.
-                    var pathFolder = _pathService.GetPathFolderForModule(_appEnvironment.WebRootPath, nameVendor, nameVendorModule, letter.DateOfLetter);
-                    fullPath = pathFolder + "\\" + moduleDb.PathVendorModule.Split('\\').Last();
-                    _fileService.Move(moduleDb.PathVendorModule, fullPath);
-                }
-                if (module.FileModule != null)
-                {
-                    // Добавляем файл.
-                    _fileService.DeleteFile(moduleDb.PathVendorModule);
-                    var pathFolder = _pathService.GetPathFolderForModule(_appEnvironment.WebRootPath, nameVendor, nameVendorModule, letter.DateOfLetter);
-                    fullPath = await _fileService.SaveFileAsync(module.FileModule, pathFolder);
-                }
-
-                try
-                {
-                    var updateModule = _repo.GetById(module.Id);
-                    updateModule.Changes = module.Changes;
-                    updateModule.CRC = module.CRC;
-                    updateModule.LetterId = module.LetterId;
-                    updateModule.PathVendorModule = fullPath;
-                    updateModule.VendorModuleId = module.VendorModuleId;
-                    updateModule.Version = module.Version;
-
-                    await _repo.UpdateAsync(updateModule);
-                    return RedirectToAction(nameof(AgreedModules));
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e.Message);
-                    // Удаляем файл, если запись в БД не прошла
-                    _fileService.DeleteFile(fullPath);
-                    return View(module.Id);
-                }
+                    AgreedModule = agreedModule,
+                    FileModule = module.FileModule
+                });
+               
+                return RedirectToAction(nameof(AgreedModules));
 
             }
             catch (Exception e)
@@ -227,7 +161,6 @@ namespace CpaRepository.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             try

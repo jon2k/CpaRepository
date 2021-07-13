@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CpaRepository.Controllers
@@ -38,7 +37,6 @@ namespace CpaRepository.Controllers
         }
         
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CpaModule module)
         {
            
@@ -98,7 +96,6 @@ namespace CpaRepository.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             try

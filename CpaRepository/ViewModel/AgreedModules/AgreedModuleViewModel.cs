@@ -1,6 +1,8 @@
 ﻿using CpaRepository.ModelsDb;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -63,9 +65,9 @@ namespace CpaRepository.ViewModel.AgreedModules
         [Required(ErrorMessage = "Не указан файл модуля")]
         [NotMapped]
         public IFormFile FileModule { get; set; }
-        //[Display(Name = "Выберите файл письма (.pdf)")]
-        //[Required(ErrorMessage = "Не указан файл письма")]
-        //[NotMapped]
-        //public IFormFile FileLetter { get; set; }
+     
+        public List<SelectListItem> VendorsId { get; set; }
+        public List<SelectListItem> VendorModulesId { get; set; }
+        public List<SelectListItem> LettersId { get; set; }
     }
 }

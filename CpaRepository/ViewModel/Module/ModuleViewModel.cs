@@ -9,6 +9,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CpaRepository.ViewModel.ActualVendorModule
 {
+    public class ModuleVM
+    {
+        public List<ModuleViewModel> AllModule { get; set; }
+        public List<SelectListItem> AllVendorId { get; set; }
+        public List<SelectListItem> AllCpaModuleId { get; set; }
+        public bool IsArchive { get; set; }
+    }
     public class ModuleViewModel
     {
         public int Id { get; set; }
@@ -76,5 +83,6 @@ namespace CpaRepository.ViewModel.ActualVendorModule
 
         [Display(Name = "Связь с модулями  ТПР")]
         public virtual List<CpaModule> CpaModules { get; set; }
+
     }
 }

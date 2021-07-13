@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace CpaRepository.Repository
 {
-    public interface ILetterRepo : IRepository<Letter>
+    public interface ILetterRepo : IRepository<Letter>, ICommonQuery
     {
-        IEnumerable<Vendor> GetAllVendors();
-        string GetNameVendor(int id);
-        IEnumerable<VendorModule> GetVendorModulesOneVendor(int id);
-        IEnumerable<CpaModule> GetAllCpaModules();
 
     }
 }

@@ -16,6 +16,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using CpaRepository.Logger;
 using System.IO;
+using AutoMapper;
+using Web.AutoMapper;
+using MediatR;
+using System.Reflection;
+using Web;
+using Web.Mediatr.Query;
+using CpaRepository.ViewModel.ActualVendorModule;
 
 namespace CpaRepository
 {
@@ -33,14 +40,30 @@ namespace CpaRepository
         {
             services.AddDbContext<ApplicationContext>(options => options.UseSqlite("Filename=Cpa.db"));
             services.AddControllersWithViews();
-            services.AddScoped<VendorModuleRepo>();
-            services.AddScoped<AgreedModulesRepo>();
+            services.AddScoped<IVendorModuleRepo, VendorModuleRepo>();
+            services.AddScoped<IAgreedModulesRepo, AgreedModulesRepo>();
             services.AddScoped<LetterRepo>();
-            services.AddScoped<Repository<Vendor>>();
+            services.AddScoped<IRepository<Vendor>, Repository<Vendor>>();
             services.AddScoped<Repository<CpaModule>>();
             services.AddScoped<Repository<AgreedModule>>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IPathService, PathService>();
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(typeof(Startup));
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            // services.AddMediatR(Assembly.GetExecutingAssembly());
+            // services.AddMediatR(Assembly.GetExecutingAssembly(), typeof(GetAgreedModulesQuery).GetTypeInfo().Assembly);
+
+
+            services.AddTransient<IRequestHandler<GetActualModulesQuery, ModuleVM>, GetActualModulesQuery.GetActualModulesQueryHandler>();
+            // services.AddTransient<IRequestHandler<GetArchiveModulesQuery, ModuleVM>, GetArchiveModulesQuery.GetArchiveModulesQueryHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

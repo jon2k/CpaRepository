@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CpaRepository.Controllers
@@ -12,8 +11,8 @@ namespace CpaRepository.Controllers
     public class VendorsController : Controller
     {
         private readonly ILogger<VendorsController> _logger;
-        private Repository<Vendor> _repo;
-        public VendorsController(Repository<Vendor> context, ILogger<VendorsController> logger)
+        private IRepository<Vendor> _repo;
+        public VendorsController(IRepository<Vendor> context, ILogger<VendorsController> logger)
         {
             _repo = context;
             _logger = logger;
@@ -22,7 +21,7 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                IEnumerable<Vendor> vendors = _repo.GetAll();             
+                IEnumerable<Vendor> vendors = _repo.GetAll();
                 return View(vendors);
             }
             catch (Exception e)
@@ -31,15 +30,14 @@ namespace CpaRepository.Controllers
                 return RedirectToAction(nameof(Index), "HomeController");
             }
         }
-        
+
         public ActionResult Create()
         {
-                     
-             return View();
+
+            return View();
         }
-        
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Vendor vendor)
         {
             try
@@ -53,7 +51,7 @@ namespace CpaRepository.Controllers
                 return View();
             }
         }
-        
+
         public ActionResult Edit(int id)
         {
             try
@@ -67,7 +65,7 @@ namespace CpaRepository.Controllers
                 return RedirectToAction(nameof(Vendor));
             }
         }
-        
+
         [HttpPost]
         public async Task<ActionResult> Edit(Vendor vendor)
         {
@@ -82,13 +80,12 @@ namespace CpaRepository.Controllers
                 return View();
             }
         }
-        
+
         public ActionResult Delete(int id)
         {
             try
             {
                 var vendor = _repo.GetById(id);
-              //  ViewBag.Vendor = _db.GetNameVendor(module.VendorId);
                 return View(vendor);
             }
             catch (Exception e)
@@ -99,7 +96,6 @@ namespace CpaRepository.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             try
