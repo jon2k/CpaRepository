@@ -1,8 +1,8 @@
 ﻿@using CpaRepository.ModelsDb
-@model CpaRepository.ViewModel.AgreedModules.AgreedModuleViewModel
+@model IEnumerable<Letter>
 
-<select asp-for="LetterId" class="form-control" id="letters">
-    @foreach (var item in ViewBag.Letters as IEnumerable<Letter>)
+<select class="form-control" id="letters">
+    @foreach (var item in Model as IEnumerable<Letter>)
     {
         <option value="@item.Id">@item.NumberLetter</option>
     }

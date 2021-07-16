@@ -1,22 +1,16 @@
-﻿using CpaRepository.EF;
-using CpaRepository.Service;
+﻿using AutoMapper;
 using CpaRepository.ModelsDb;
 using CpaRepository.Repository;
 using CpaRepository.ViewModel.AgreedModules;
-using CpaRepository.ViewModel.VendorModule;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using MediatR;
 using Web.Mediatr.AgreedModulesController;
+using Web.Mediatr.Command;
 using Web.Mediatr.Query;
 
 namespace CpaRepository.Controllers
@@ -26,20 +20,12 @@ namespace CpaRepository.Controllers
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
         private readonly ILogger<VendorModuleController> _logger;
-        private IAgreedModulesRepo _repo;
-        private IWebHostEnvironment _appEnvironment;
-        private IFileService _fileService;
-        private IPathService _pathService;
-        public AgreedModulesController(IMapper mapper, IMediator mediator, IAgreedModulesRepo context, ILogger<VendorModuleController> logger,
-            IWebHostEnvironment appEnvironment, IFileService fileService, IPathService pathService)
+
+        public AgreedModulesController(IMapper mapper, IMediator mediator, IAgreedModulesRepo context, ILogger<VendorModuleController> logger)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _repo = context;
             _logger = logger;
-            _appEnvironment = appEnvironment;
-            _fileService = fileService;
-            _pathService = pathService;
         }
         public async Task<ActionResult> AgreedModules()
         {
@@ -143,13 +129,12 @@ namespace CpaRepository.Controllers
                 return View(module.Id);
             }
         }
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                var model = _repo.GetById(id);
-                var mapper = new Mapper(GetMapConfigModelToViewModel());
-                var vm = mapper.Map<AgreedModuleViewModel>(model);
+                var model = await _mediator.Send(new GetAgreedModuleByIdQuery() { Id = id });
+                var vm = _mapper.Map<AgreedModuleViewModel>(model);
 
                 return View(vm);
             }
@@ -165,9 +150,7 @@ namespace CpaRepository.Controllers
         {
             try
             {
-                var module = _repo.GetById(id);
-                await _repo.DeleteAsync(module);
-                _fileService.DeleteFile(module.PathVendorModule);
+                await _mediator.Send(new DeleteAgreedModuleCommand() { Id = id });              
                 return RedirectToAction(nameof(AgreedModules));
             }
             catch (Exception e)
@@ -177,12 +160,12 @@ namespace CpaRepository.Controllers
             }
         }
 
-        public ActionResult GetVendorModules(int id)
+        public async Task<ActionResult> GetVendorModules(int id)
         {
             try
             {
-                ViewBag.VendorModules = _repo.GetVendorModulesOneVendor(id);
-                return PartialView();
+                var vm = await _mediator.Send(new GetVendorModuleOneVendorQuery() { Id=id});
+                return PartialView(vm);
             }
             catch (Exception e)
             {
@@ -190,12 +173,12 @@ namespace CpaRepository.Controllers
                 return PartialView();
             }
         }
-        public ActionResult GetLetters(int id)
+        public async Task<ActionResult> GetLetters(int id)
         {
             try
             {
-                ViewBag.Letters = _repo.GetLettersOneVendor(id);
-                return PartialView();
+                var vm = await _mediator.Send(new GetLettersOneVendorQuery() { Id = id });
+                return PartialView(vm);
             }
             catch (Exception e)
             {
@@ -203,11 +186,11 @@ namespace CpaRepository.Controllers
                 return PartialView();
             }
         }
-        public IActionResult DownloadFile(int id)
+        public async Task<IActionResult> DownloadFile(int id)
         {
             try
             {
-                var module = _repo.GetById(id);
+                var module = await _mediator.Send(new GetAgreedModuleByIdQuery() { Id = id });
                 if (module.PathVendorModule != null)
                 {
                     return PhysicalFile(module.PathVendorModule, "application/octet-stream", module.PathVendorModule.Split('\\').Last());
@@ -224,16 +207,6 @@ namespace CpaRepository.Controllers
                 return RedirectToAction(nameof(AgreedModules));
             }
         }
-        private MapperConfiguration GetMapConfigModelToViewModel()
-        {
-            return new MapperConfiguration(cfg => cfg.CreateMap<AgreedModule, AgreedModuleViewModel>()
-                  .ForMember(nameof(AgreedModuleViewModel.ExistModule), opt => opt
-                  .MapFrom(src => System.IO.File.Exists(src.PathVendorModule)))
-                  .ForMember(nameof(AgreedModuleViewModel.DateOfLetter), opt => opt.MapFrom(src => src.Letter.DateOfLetter))
-                  .ForMember(nameof(AgreedModuleViewModel.NumberLetter), opt => opt.MapFrom(src => src.Letter.NumberLetter))
-                  .ForMember(nameof(AgreedModuleViewModel.VendorId), opt => opt.MapFrom(src => src.VendorModule.VendorId))
-                  .ForMember(nameof(AgreedModuleViewModel.Vendor), opt => opt.MapFrom(src => src.VendorModule.Vendor)));
-        }
-
+       
     }
 }

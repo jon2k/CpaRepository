@@ -447,3 +447,32 @@ Content root path: D:\Project VS\CpaRepository\CpaRepository
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Development
 Content root path: D:\Project VS\CpaRepository\CpaRepository
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project VS\CpaRepository\CpaRepository
+Missing type map configuration or unsupported mapping.
+
+Mapping types:
+Object -> AgreedModuleViewModel
+System.Object -> CpaRepository.ViewModel.AgreedModules.AgreedModuleViewModel
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project VS\CpaRepository\CpaRepository
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project VS\CpaRepository\CpaRepository
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project VS\CpaRepository\CpaRepository
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project VS\CpaRepository\CpaRepository
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project VS\CpaRepository\CpaRepository
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project VS\CpaRepository\CpaRepository
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project VS\CpaRepository\CpaRepository

@@ -14,7 +14,7 @@ namespace CpaRepository.Repository
         Task<TEntity> AddAsync(TEntity entity);
 
         Task<TEntity> UpdateAsync(TEntity entity);
-        Task DeleteAsync(TEntity entity);
+        Task<int> DeleteAsync(TEntity entity);
     }
 
 }

@@ -71,7 +71,7 @@ namespace CpaRepository.Repository
             }
         }
 
-        public async Task DeleteAsync(TEntity entity)
+        public async Task<int> DeleteAsync(TEntity entity)
         {
             if (entity == null)
             {
@@ -80,7 +80,7 @@ namespace CpaRepository.Repository
             try
             {
                 _db.Remove(entity);
-                await _db.SaveChangesAsync();
+                return await _db.SaveChangesAsync();
             }
             catch (Exception ex)
             {
