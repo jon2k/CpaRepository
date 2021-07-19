@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using System;
+﻿using System;
+using Core.Interfaces.FileSystem;
 
-namespace CpaRepository.Service
+namespace Infrastructure.FileSystem
 {
     public class PathService : IPathService
     {

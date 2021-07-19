@@ -1,16 +1,12 @@
-﻿using CpaRepository.ModelsDb;
-using CpaRepository.Repository;
-using CpaRepository.ViewModel.AgreedModules;
-using MediatR;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Interfaces.EF;
+using MediatR;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Web.ViewModel.AgreedModules;
 
-namespace Web.Mediatr.Query
+namespace Web.Mediatr.Query.AgreedModuleController
 {
     public class GetVmForAgreedModuleCreateQuery : IRequest<AgreedModuleViewModel>
     {

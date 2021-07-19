@@ -1,4 +1,4 @@
-﻿namespace CpaRepository.ViewModel.ActualVendorModule
+﻿namespace Web.ViewModel.Module
 {
     public class DataForFiltr
     {

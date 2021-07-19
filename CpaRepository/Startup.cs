@@ -1,7 +1,3 @@
-using CpaRepository.EF;
-using CpaRepository.Service;
-using CpaRepository.ModelsDb;
-using CpaRepository.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,15 +10,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using CpaRepository.Logger;
 using System.IO;
 using AutoMapper;
 using Web.AutoMapper;
 using MediatR;
 using System.Reflection;
+using Core.Interfaces.EF;
+using Core.Interfaces.FileSystem;
+using Core.Models;
 using Web;
 using Web.Mediatr.Query;
-using CpaRepository.ViewModel.ActualVendorModule;
+using Infrastructure.EF;
+using Infrastructure.FileSystem;
+using Infrastructure.Logger;
+using Infrastructure.Repository;
+using Web.Mediatr.Query.ModulesController;
+using Web.ViewModel.Module;
 
 namespace CpaRepository
 {
@@ -42,10 +45,10 @@ namespace CpaRepository
             services.AddControllersWithViews();
             services.AddScoped<IVendorModuleRepo, VendorModuleRepo>();
             services.AddScoped<IAgreedModulesRepo, AgreedModulesRepo>();
-            services.AddScoped<LetterRepo>();
+            services.AddScoped<ILetterRepo,LetterRepo>();
             services.AddScoped<IRepository<Vendor>, Repository<Vendor>>();
-            services.AddScoped<Repository<CpaModule>>();
-            services.AddScoped<Repository<AgreedModule>>();
+            services.AddScoped<IRepository<CpaModule>, Repository<CpaModule>>();
+            services.AddScoped<IRepository<AgreedModule>, Repository<AgreedModule>>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IPathService, PathService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());

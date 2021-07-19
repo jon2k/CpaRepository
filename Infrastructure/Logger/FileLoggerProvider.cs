@@ -1,10 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace CpaRepository.Logger
+namespace Infrastructure.Logger
 {
     public class FileLoggerProvider : ILoggerProvider
     {

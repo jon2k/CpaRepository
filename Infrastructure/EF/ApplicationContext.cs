@@ -1,9 +1,9 @@
-﻿using CpaRepository.ModelsDb;
+﻿using System;
+using Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
 
-namespace CpaRepository.EF
+namespace Infrastructure.EF
 {
     public class ApplicationContext : DbContext
     {

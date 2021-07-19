@@ -1,7 +1,7 @@
-﻿using CpaRepository.ModelsDb;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Core.Models;
 
-namespace CpaRepository.Repository
+namespace Core.Interfaces.EF
 {
     public interface ICommonQuery
     {

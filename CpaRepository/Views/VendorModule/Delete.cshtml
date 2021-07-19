@@ -1,10 +1,10 @@
-﻿@model CpaRepository.ModelsDb.VendorModule
+﻿@model Core.Models.VendorModule
 
 @{
     ViewData["Title"] = "View";
 }
 
-<h1>Удаление модуля  @Model.NameModule вендора @ViewBag.Vendor</h1>
+<h1>Удаление модуля  @Model.NameModule вендора @Model.Vendor.Name</h1>
 
 <h3>AВы уверены, что хотите удалить модуль?</h3>
 <div>
@@ -28,12 +28,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Timestamp)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Timestamp)
         </dd>
     </dl>
     

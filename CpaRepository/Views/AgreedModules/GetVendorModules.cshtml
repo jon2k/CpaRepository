@@ -1,6 +1,5 @@
-﻿
-@using CpaRepository.ModelsDb
-@model IEnumerable<VendorModule>
+﻿@using Core.Models
+@model IEnumerable<Core.Models.VendorModule>
 
 <select class="form-control" id="vendorModules">
     @foreach (var item in Model as IEnumerable<VendorModule>)

@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Core.Interfaces.FileSystem;
+using Microsoft.AspNetCore.Http;
 
-namespace CpaRepository.Service
+namespace Infrastructure.FileSystem
 {
     public class FileService : IFileService
     {

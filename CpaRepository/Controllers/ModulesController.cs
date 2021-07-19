@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CpaRepository.ViewModel.ActualVendorModule;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,10 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Web.Mediatr.ModulesController;
 using Web.Mediatr.Query;
+using Web.Mediatr.Query.ModulesController;
+using Web.ViewModel.Module;
 
-namespace CpaRepository.Controllers
+namespace Web.Controllers
 {
     public class ModulesController : Controller
     {

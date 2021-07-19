@@ -1,11 +1,11 @@
-﻿using CpaRepository.Repository;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Interfaces.EF;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Mediatr.ModulesController
+namespace Web.Mediatr.Query
 {
     public class GetFileQuery : IRequest<PhysicalFileResult>
     {

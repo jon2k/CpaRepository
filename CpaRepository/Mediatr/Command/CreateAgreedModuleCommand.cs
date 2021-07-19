@@ -1,14 +1,14 @@
-﻿using CpaRepository.ModelsDb;
-using CpaRepository.Repository;
-using CpaRepository.Service;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Core.Interfaces.EF;
+using Core.Interfaces.FileSystem;
+using Core.Models;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Web.Mediatr.AgreedModulesController
+namespace Web.Mediatr.Command
 {
     public class CreateAgreedModuleCommand : IRequest<AgreedModule>
     {

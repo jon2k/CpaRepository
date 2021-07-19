@@ -1,19 +1,19 @@
-﻿using AutoMapper;
-using CpaRepository.ModelsDb;
-using CpaRepository.Repository;
-using CpaRepository.ViewModel.AgreedModules;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
+using Core.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Web.Mediatr.AgreedModulesController;
 using Web.Mediatr.Command;
 using Web.Mediatr.Query;
+using Web.Mediatr.Query.AgreedModuleController;
+using Web.Mediatr.Query.LetterController;
+using Web.Mediatr.Query.ModulesController;
+using Web.ViewModel.AgreedModules;
 
-namespace CpaRepository.Controllers
+namespace Web.Controllers.Admin
 {
     public class AgreedModulesController : Controller
     {
@@ -21,11 +21,11 @@ namespace CpaRepository.Controllers
         private readonly IMediator _mediator;
         private readonly ILogger<VendorModuleController> _logger;
 
-        public AgreedModulesController(IMapper mapper, IMediator mediator, IAgreedModulesRepo context, ILogger<VendorModuleController> logger)
+        public AgreedModulesController(IMapper mapper, IMediator mediator, ILogger<VendorModuleController> logger)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         public async Task<ActionResult> AgreedModules()
         {
@@ -41,6 +41,7 @@ namespace CpaRepository.Controllers
                 return RedirectToAction(nameof(Index), "AgreedModuleController");
             }
         }
+        
         public async Task<ActionResult> Create()
         {
             try
@@ -54,26 +55,26 @@ namespace CpaRepository.Controllers
                 return RedirectToAction(nameof(AgreedModules));
             }
         }
+       
         [HttpPost]
-        public async Task<ActionResult> Create(AgreedModuleViewModel agreedModuleVM)
+        public async Task<ActionResult> Create(AgreedModuleViewModel vm)
         {
             try
             {
-                if (agreedModuleVM.FileModule != null)
-                {
-                    var agreedModule = _mapper.Map<AgreedModule>(agreedModuleVM);
-                    var module = await _mediator.Send(new EditAgreedModuleCommand()
+                if (vm.FileModule != null)
+                {                 
+                    var module = await _mediator.Send(new CreateAgreedModuleCommand()
                     {
-                        AgreedModule = agreedModule,
-                        FileModule = agreedModuleVM.FileModule
+                        AgreedModule = _mapper.Map<AgreedModule>(vm),
+                        FileModule = vm.FileModule
                     });
                     if (module != null)
                     {
                         _logger.LogInformation($"Добавлен согласованный модуль. " +
-                           $"Вендор - {agreedModule.VendorModule.Vendor.Name}, " +
-                           $"Модуль - {agreedModule.VendorModule.NameModule}, " +
-                           $"Версия - {agreedModule.Version}, " +
-                           $"CRC - {agreedModule.CRC}, " +
+                           $"Вендор - {module.VendorModule.Vendor.Name}, " +
+                           $"Модуль - {module.VendorModule.NameModule}, " +
+                           $"Версия - {module.Version}, " +
+                           $"CRC - {module.CRC}, " +
                            $"Время - {DateTime.Now}");
                         return RedirectToAction(nameof(AgreedModules));
                     }
@@ -94,6 +95,7 @@ namespace CpaRepository.Controllers
                 return View();
             }
         }
+        
         public async Task<ActionResult> Edit(int id)
         {
             try
@@ -109,15 +111,14 @@ namespace CpaRepository.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(AgreedModuleViewModel module)
+        public async Task<ActionResult> Edit(AgreedModuleViewModel vm)
         {
             try
             {
-                var agreedModule = _mapper.Map<AgreedModule>(module);
                 var res= await _mediator.Send(new EditAgreedModuleCommand()
                 {
-                    AgreedModule = agreedModule,
-                    FileModule = module.FileModule
+                    AgreedModule = _mapper.Map<AgreedModule>(vm),
+                    FileModule = vm.FileModule
                 });
                
                 return RedirectToAction(nameof(AgreedModules));
@@ -126,9 +127,10 @@ namespace CpaRepository.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-                return View(module.Id);
+                return View(vm.Id);
             }
         }
+        
         public async Task<ActionResult> Delete(int id)
         {
             try
@@ -173,6 +175,7 @@ namespace CpaRepository.Controllers
                 return PartialView();
             }
         }
+        
         public async Task<ActionResult> GetLetters(int id)
         {
             try
@@ -186,18 +189,19 @@ namespace CpaRepository.Controllers
                 return PartialView();
             }
         }
+        
         public async Task<IActionResult> DownloadFile(int id)
         {
             try
-            {
-                var module = await _mediator.Send(new GetAgreedModuleByIdQuery() { Id = id });
-                if (module.PathVendorModule != null)
+            {             
+                var file = await _mediator.Send(new GetFileQuery() { Id = id });
+                if (file != null)
                 {
-                    return PhysicalFile(module.PathVendorModule, "application/octet-stream", module.PathVendorModule.Split('\\').Last());
+                    return file;
                 }
                 else
                 {
-                    _logger.LogError("Отсутствует полный путь к файлу письма.");
+                    _logger.LogError("Отсутствует файл письма.");
                     return RedirectToAction(nameof(AgreedModules));
                 }
             }

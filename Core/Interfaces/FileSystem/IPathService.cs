@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CpaRepository.Service
+namespace Core.Interfaces.FileSystem
 {
     public interface IPathService
     {

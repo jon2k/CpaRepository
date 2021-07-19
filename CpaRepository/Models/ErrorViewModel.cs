@@ -1,6 +1,4 @@
-using System;
-
-namespace CpaRepository.Models
+namespace Web.Models
 {
     public class ErrorViewModel
     {

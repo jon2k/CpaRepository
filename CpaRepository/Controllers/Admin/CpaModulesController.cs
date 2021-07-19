@@ -1,18 +1,18 @@
-﻿using CpaRepository.ModelsDb;
-using CpaRepository.Repository;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.Interfaces.EF;
+using Core.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace CpaRepository.Controllers
+namespace Web.Controllers.Admin
 {
     public class CpaModulesController : Controller
     {
         private readonly ILogger<CpaModulesController> _logger;
-        private Repository<CpaModule> _repo;
-        public CpaModulesController(Repository<CpaModule> context, ILogger<CpaModulesController> logger)
+        private IRepository<CpaModule> _repo;
+        public CpaModulesController(IRepository<CpaModule> context, ILogger<CpaModulesController> logger)
         {
             _repo = context;
             _logger = logger;

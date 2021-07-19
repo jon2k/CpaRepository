@@ -1,17 +1,17 @@
-﻿using AutoMapper;
-using CpaRepository.Models;
-using CpaRepository.ViewModel.ActualVendorModule;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Web.Mediatr.Query;
+using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Web.Mediatr.Query.AgreedModuleController;
+using Web.Models;
+using Web.ViewModel.Module;
 
-namespace CpaRepository.Controllers
+namespace Web.Controllers
 {
     public class HomeController : Controller
     {

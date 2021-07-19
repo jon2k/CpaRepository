@@ -1,33 +1,34 @@
-﻿using CpaRepository.ModelsDb;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Core.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace CpaRepository.ViewModel.AgreedModules
+namespace Web.ViewModel.AgreedModules
 {
     public class AgreedModuleViewModel
     {
         public int Id { get; set; }
+
         [Display(Name = "Вендор")]
         [Required(ErrorMessage ="Не указан вендор")]
         public int VendorId { get; set; }
-      //  [Required]
+ 
         public virtual Vendor Vendor { get; set; }
         
         [Display(Name = "Вендорный модуль")]
         [Required(ErrorMessage = "Не указан вендорный модуль")]
         public int VendorModuleId { get; set; }
        
-        public virtual CpaRepository.ModelsDb.VendorModule VendorModule { get; set; }
+        public virtual Core.Models.VendorModule VendorModule { get; set; }
 
         [Display(Name = "Письмо о согласовании")]
         [Required(ErrorMessage = "Не указано письмо о согласовании")]
         public int LetterId { get; set; }
 
-        public virtual CpaRepository.ModelsDb.Letter Letter { get; set; }
+        public virtual Core.Models.Letter Letter { get; set; }
 
         [Display(Name = "Контрольная сумма")]
         [Required(ErrorMessage = "Не указана контрольная сумма")]
@@ -43,11 +44,9 @@ namespace CpaRepository.ViewModel.AgreedModules
         public DateTime DateOfLetter { get; set; }
        
         [Display(Name = "Ссылка на модуль")]
-        //[Required(ErrorMessage = "Не указан путь к модулю")]
         public string PathVendorModule { get; set; }
         
         [Display(Name = "Ссылка на письмо")]
-        //[Required(ErrorMessage = "Не указан путь к модулю")]
         public string PatchLetter { get; set; }
 
         [Display(Name = "Номер письма о согласовании")]
@@ -67,7 +66,9 @@ namespace CpaRepository.ViewModel.AgreedModules
         public IFormFile FileModule { get; set; }
      
         public List<SelectListItem> VendorsId { get; set; }
+
         public List<SelectListItem> VendorModulesId { get; set; }
+
         public List<SelectListItem> LettersId { get; set; }
     }
 }

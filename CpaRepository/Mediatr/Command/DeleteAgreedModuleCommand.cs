@@ -1,9 +1,8 @@
-﻿using CpaRepository.Repository;
-using CpaRepository.Service;
-using MediatR;
-using System;
+﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Interfaces.EF;
+using Core.Interfaces.FileSystem;
 
 namespace Web.Mediatr.Command
 {
@@ -18,8 +17,8 @@ namespace Web.Mediatr.Command
 
             public DeleteAgreedModuleCommandHandler(IAgreedModulesRepo repo, IFileService fileService)
             {
-                _repo = repo ?? throw new ArgumentNullException(nameof(repo));
-                _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));              
+                _repo = repo;
+                _fileService = fileService;              
             }
 
             public async Task<int> Handle(DeleteAgreedModuleCommand request, CancellationToken cancellationToken)

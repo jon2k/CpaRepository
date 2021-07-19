@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
-namespace CpaRepository.Service
+namespace Core.Interfaces.FileSystem
 {
     public interface IFileService
     {

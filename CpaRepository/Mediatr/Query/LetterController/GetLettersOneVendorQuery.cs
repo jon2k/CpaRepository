@@ -1,11 +1,11 @@
-﻿using CpaRepository.ModelsDb;
-using CpaRepository.Repository;
-using MediatR;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Interfaces.EF;
+using Core.Models;
+using MediatR;
 
-namespace Web.Mediatr.Query
+namespace Web.Mediatr.Query.LetterController
 {
     public class GetLettersOneVendorQuery : IRequest<IEnumerable<Letter>>
     {

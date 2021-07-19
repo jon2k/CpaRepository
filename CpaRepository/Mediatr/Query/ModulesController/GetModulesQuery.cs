@@ -1,17 +1,13 @@
-﻿using AutoMapper;
-using CpaRepository.ModelsDb;
-using CpaRepository.Repository;
-using CpaRepository.ViewModel.ActualVendorModule;
-using MediatR;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Interfaces.EF;
+using Core.Models;
+using MediatR;
+using Web.ViewModel.Module;
 
-namespace Web.Mediatr.ModulesController
+namespace Web.Mediatr.Query.ModulesController
 {
     public class GetModulesQuery : IRequest<IEnumerable<AgreedModule>>
     {

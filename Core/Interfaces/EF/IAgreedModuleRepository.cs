@@ -1,10 +1,8 @@
-﻿using CpaRepository.ModelsDb;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Core.Models;
 
-namespace CpaRepository.Repository
+namespace Core.Interfaces.EF
 {
     public interface IAgreedModuleRepository : IRepository<AgreedModule>
     {

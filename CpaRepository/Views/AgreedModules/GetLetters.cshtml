@@ -1,5 +1,5 @@
-﻿@using CpaRepository.ModelsDb
-@model IEnumerable<Letter>
+﻿@using Core.Models
+@model IEnumerable<Core.Models.Letter>
 
 <select class="form-control" id="letters">
     @foreach (var item in Model as IEnumerable<Letter>)

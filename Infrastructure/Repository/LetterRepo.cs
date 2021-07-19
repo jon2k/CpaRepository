@@ -1,11 +1,10 @@
-﻿using CpaRepository.EF;
-using CpaRepository.ModelsDb;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Core.Interfaces.EF;
+using Core.Models;
+using Infrastructure.EF;
 
-namespace CpaRepository.Repository
+namespace Infrastructure.Repository
 {
     public class LetterRepo: Repository<Letter>, ILetterRepo
     {
