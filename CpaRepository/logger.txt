@@ -1,3 +1,6 @@
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Development
 Content root path: D:\Project VS\CpaRepository\CpaRepository
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project VS\CpaRepository\CpaRepository
