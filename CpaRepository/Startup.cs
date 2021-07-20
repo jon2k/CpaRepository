@@ -1,18 +1,24 @@
-using CpaRepository.EF;
-using CpaRepository.Service;
-using CpaRepository.ModelsDb;
-using CpaRepository.Repository;
+using AutoMapper;
+using Core.Interfaces.EF;
+using Core.Interfaces.FileSystem;
+using Core.Models;
+using Infrastructure.EF;
+using Infrastructure.FileSystem;
+using Infrastructure.Logger;
+using Infrastructure.Repository;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using System.IO;
+using System.Reflection;
+using Web.AutoMapper;
+using Web.Mediatr.Query.ModulesController;
+using Web.ViewModel.Module;
 
 namespace CpaRepository
 {
@@ -30,18 +36,29 @@ namespace CpaRepository
         {
             services.AddDbContext<ApplicationContext>(options => options.UseSqlite("Filename=Cpa.db"));
             services.AddControllersWithViews();
-            services.AddScoped<VendorModuleRepo>();
-            services.AddScoped<AgreedModulesRepo>();
-            services.AddScoped<LetterRepo>();
-            services.AddScoped<Repository<Vendor>>();
-            services.AddScoped<Repository<CpaModule>>();
-            services.AddScoped<Repository<AgreedModule>>();
+            services.AddScoped<IVendorModuleRepo, VendorModuleRepo>();
+            services.AddScoped<IAgreedModulesRepo, AgreedModulesRepo>();
+            services.AddScoped<ILetterRepo,LetterRepo>();
+            services.AddScoped<IRepository<Vendor>, Repository<Vendor>>();
+            services.AddScoped<IRepository<CpaModule>, Repository<CpaModule>>();
+            services.AddScoped<IRepository<AgreedModule>, Repository<AgreedModule>>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IPathService, PathService>();
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(typeof(Startup));
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);        
+
+            services.AddTransient<IRequestHandler<GetActualModulesQuery, ModuleVM>, GetActualModulesQuery.GetActualModulesQueryHandler>();          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -66,6 +83,8 @@ namespace CpaRepository
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logger.txt"));
+            var logger = loggerFactory.CreateLogger("FileLogger");
         }
     }
 }

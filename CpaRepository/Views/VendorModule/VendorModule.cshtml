@@ -1,0 +1,60 @@
+﻿@model Web.ViewModel.VendorModule.VendorModuleVM
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>Модули @Model.VendorName</h1>
+
+<p>
+    <a asp-action="Create" asp-route-id="@Model.VendorId">Добавить</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <!-- <th>
+                @Html.DisplayNameFor(model => model.VendorModules[0].Vendor)
+            </th>-->
+            <th>
+                @Html.DisplayNameFor(model => model.VendorModules[0].NameModule)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorModules[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorModules[0].CpaModules)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.VendorModules)
+        {
+            <tr>
+                <!--<td>
+                    @Html.DisplayFor(modelItem => item.Vendor.Name)
+                </td>-->
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameModule)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @for (int i = 0; i < item.CpaModules.Count; i++)
+                    {
+                        @Html.DisplayFor(modelItem => item.CpaModules[i].NameModule)
+                        if (item.CpaModules.Count > 1 && i < item.CpaModules.Count - 1)
+                        {
+                            <a>, </a>
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

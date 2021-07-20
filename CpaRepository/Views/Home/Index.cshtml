@@ -1,12 +1,80 @@
-﻿@model IEnumerable<CpaRepository.ModelsDb.Vendor>
+﻿@model IEnumerable<Web.ViewModel.Module.ModuleViewModel>
 @{
     ViewData["Title"] = "Главная";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-6">Типовые алгоритмические модули</h1>
+</div>
+<br />
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h5 class="text-center">Актуальные вендорные модули</h5>
+            <table class="table">
+                <thead></thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a asp-controller="Modules" asp-action="ActualModules" asp-route-id="1"> <img src="~/prosoft_logo.png" height="20" /></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a asp-controller="Modules" asp-action="ActualModules" asp-route-id="2"> <img src="~/emicon_logo_2.gif" height="20" /></a>
 
-   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a asp-controller="Modules" asp-action="ActualModules" asp-route-id="3"> <img src="~/siemens.png" height="20" /></a>
 
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <a asp-controller="Modules" asp-action="ActualModules" asp-route-id="4"> <img src="~/logo.svg" height="20" /></a>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a asp-controller="Modules" asp-action="ActualModules" asp-route-id="5"> <img src="~/se.png" height="20" /></a>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col">
+            <h5 class="text-center"> Последние согласованные модули</h5>
+
+            <table class="table">
+                <thead>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Vendor.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.VendorModule.NameModule)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateOfLetter)
+                            </td>
+                            <td>
+                                <a asp-controller="Modules" asp-action="ActualModules">Посмотреть</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

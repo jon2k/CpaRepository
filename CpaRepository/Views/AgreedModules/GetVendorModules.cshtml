@@ -1,10 +1,10 @@
-﻿
-@using CpaRepository.ModelsDb
-@model CpaRepository.ViewModel.AgreedModules.AgreedModuleViewModel
+﻿@using Core.Models
+@model IEnumerable<Core.Models.VendorModule>
 
-<select asp-for="VendorModuleId" class="form-control" id="vendorModules" >
-    @foreach (var item in ViewBag.VendorModules as IEnumerable<VendorModule>)
+<select class="form-control" id="vendorModules">
+    @foreach (var item in Model as IEnumerable<VendorModule>)
     {
         <option value="@item.Id">@item.NameModule</option>
     }
 </select>
+

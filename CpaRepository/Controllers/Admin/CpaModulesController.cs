@@ -1,22 +1,21 @@
-﻿using CpaRepository.ModelsDb;
-using CpaRepository.Repository;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Core.Interfaces.EF;
+using Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace CpaRepository.Controllers
+namespace Web.Controllers.Admin
 {
     public class CpaModulesController : Controller
     {
         private readonly ILogger<CpaModulesController> _logger;
-        private Repository<CpaModule> _repo;
-        public CpaModulesController(Repository<CpaModule> context, ILogger<CpaModulesController> logger)
+        private IRepository<CpaModule> _repo;
+        public CpaModulesController(IRepository<CpaModule> repo, ILogger<CpaModulesController> logger)
         {
-            _repo = context;
-            _logger = logger;
+            _repo = repo ?? throw new ArgumentNullException(nameof(repo));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         public ActionResult CpaModule()
         {
@@ -38,7 +37,6 @@ namespace CpaRepository.Controllers
         }
         
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CpaModule module)
         {
            
@@ -98,7 +96,6 @@ namespace CpaRepository.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             try

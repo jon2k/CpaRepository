@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CpaRepository.ViewModel.ActualVendorModule.ModuleViewModel>
+﻿@model Web.ViewModel.Module.ModuleVM
 
 
 <h1> @ViewData["Title"]</h1>
@@ -6,11 +6,11 @@
 <div class="row">
     <div class="col-md-4">
         <label class="control-label">Вендор</label>
-        <select class="form-control" asp-items="ViewBag.VendorId" id="vendor"></select>
+        <select class="form-control" asp-items="Model.AllVendorId" id="vendor"></select>
     </div>
     <div class="col-md-4">
         <label class="control-label">ТПР модуль</label>
-        <select class="form-control" asp-items="ViewBag.CpaModuleId" id="cpaModules"></select>
+        <select class="form-control" asp-items="Model.AllCpaModuleId" id="cpaModules"></select>
     </div>
 </div>
 <br />
@@ -18,34 +18,34 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Vendor.Name)
+                @Html.DisplayNameFor(model => model.AllModule[0].Vendor.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VendorModule.NameModule)
+                @Html.DisplayNameFor(model => model.AllModule[0].VendorModule.NameModule)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CpaModules)
+                @Html.DisplayNameFor(model => model.AllModule[0].CpaModules)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Version)
+                @Html.DisplayNameFor(model => model.AllModule[0].Version)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CRC)
+                @Html.DisplayNameFor(model => model.AllModule[0].CRC)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOfLetter)
+                @Html.DisplayNameFor(model => model.AllModule[0].DateOfLetter)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Letter.NumberLetter)
+                @Html.DisplayNameFor(model => model.AllModule[0].Letter.NumberLetter)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ExistModule)
+                @Html.DisplayNameFor(model => model.AllModule[0].ExistModule)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.AllModule)
         {
         <tr>
             <td>
