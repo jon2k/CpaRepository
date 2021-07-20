@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Core.Interfaces.EF;
+﻿using AutoMapper;
 using Core.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Web.Mediatr.Command;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Web.Mediatr.Command.LetterController;
 using Web.Mediatr.Query.LetterController;
 using Web.ViewModel.Letter;
 

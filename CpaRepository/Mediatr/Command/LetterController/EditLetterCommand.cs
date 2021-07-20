@@ -9,7 +9,7 @@ using Core.Interfaces.EF;
 using Core.Interfaces.FileSystem;
 using Core.Models;
 
-namespace Web.Mediatr.Command
+namespace Web.Mediatr.Command.LetterController
 {
     public class EditLetterCommand : IRequest<Letter>
     {

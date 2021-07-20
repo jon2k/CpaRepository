@@ -29,14 +29,9 @@ namespace Web.ViewModel.VendorModule
        
         [Display(Name = "Связь с модулями  ТПР")]
         [Required(ErrorMessage = "Не указана связь с МО")]
-       // public List<CpaModuleId> CpaModules { get; set; }
         public List<int> CpaModulesId { get; set; }
 
         [Display(Name = "Связь с модулями  ТПР")]
         public List<SelectListItem> CpaModulesSelectListItem { get; set; }
-    }
-    public class CpaModuleId
-    {
-        public int Id { get; set; }
-    }
+    }  
 }

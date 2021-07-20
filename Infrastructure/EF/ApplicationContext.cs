@@ -8,13 +8,9 @@ namespace Infrastructure.EF
     public class ApplicationContext : DbContext
     {
         public ILogger<ApplicationContext> Logger { get; }
-        // public string ConnString { get; set; }
 
-        //public ApplicationContext() : base()
         public ApplicationContext(DbContextOptions<ApplicationContext> options, ILogger<ApplicationContext> logger) : base(options)
         {
-            //Logger = logger;
-            //Create DB, it it doesn't exist
             //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
@@ -34,13 +30,8 @@ namespace Infrastructure.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<AgreedModule>()
-            //    .HasIndex(b => b.CRC)
-            //    .IsUnique();
             modelBuilder.Entity<AgreedModule>(entity =>
             {
-                //entity.HasOne(a => a.Vendor)
-                //    .WithMany(v => v.AgreedModules);
                 entity.HasOne(a => a.VendorModule)
                     .WithMany(v => v.AgreedModules);
             });
@@ -138,9 +129,6 @@ namespace Infrastructure.EF
 
            });
         }
-
-        //public DbSet<AgreedModuleViewModel> AgreedModuleViewModel { get; set; }
-        // public DbSet<LetterViewModel> LetterViewModel { get; set; }
     }
 
 }

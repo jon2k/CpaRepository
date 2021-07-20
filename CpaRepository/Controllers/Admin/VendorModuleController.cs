@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using Web.Mediatr.Command;
+using Web.Mediatr.Command.VendorModuleController;
 using Web.Mediatr.Query.VendorModuleController;
 using Web.ViewModel.VendorModule;
 

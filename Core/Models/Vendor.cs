@@ -8,9 +8,11 @@ namespace Core.Models
         [Display(Name = "Наименование вендора")]
         [Required(ErrorMessage = "Не указано имя")]
         public string Name { get; set; }
+
         [Display(Name = "Описание вендора")]
         [Required(ErrorMessage = "Не указано описание")]
         public string Describtion { get; set; }
+
         public virtual List<VendorModule> VendorModules { get; set; }
 
         public override bool Equals(object obj)

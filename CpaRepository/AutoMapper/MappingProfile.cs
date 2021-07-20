@@ -15,22 +15,27 @@ namespace Web.AutoMapper
         {          
             CreateMap<VendorModuleViewModel, VendorModule>()
                // .ForMember(x => x.Id, opt => opt.Ignore())
-                .ForMember(x=>x.CpaModules, opt=>opt.MapFrom(src=>CreateCpaModulesType(src.CpaModulesId)));
-            CreateMap<CpaModuleId, CpaModule>();
+                .ForMember(x=>x.CpaModules, opt=>opt.MapFrom(src=>CreateCpaModulesType(src.CpaModulesId)));                 
+            
             CreateMap<VendorModule, VendorModuleViewModel>()
                 .ForMember(x => x.CpaModulesId, opt => opt.MapFrom(src => src.CpaModules.Select(n => n.Id).ToList()))
                 .ForMember(x => x.VendorName, opt => opt.MapFrom(src => src.Vendor));
+            
             CreateMap<Letter, LetterViewModel>()
                 .ForMember(nameof(LetterViewModel.ExistLetter), opt => opt.MapFrom(src => System.IO.File.Exists(src.PathLetter)));
+            
             CreateMap<LetterViewModel, Letter>();
+            
             CreateMap<AgreedModule, AgreedModuleViewModel>()
                 .ForMember(x => x.NumberLetter, opt => opt.MapFrom(src => src.Letter.NumberLetter))
                   .ForMember(x => x.VendorId, opt => opt.MapFrom(src => src.VendorModule.VendorId))
                   .ForMember(x => x.Vendor, opt => opt.MapFrom(src => src.VendorModule.Vendor))
                   .ForMember(nameof(AgreedModuleViewModel.ExistModule), opt => opt.MapFrom(src => System.IO.File.Exists(src.PathVendorModule)))
                   .ForMember(nameof(AgreedModuleViewModel.DateOfLetter), opt => opt.MapFrom(src => src.Letter.DateOfLetter));
+            
             CreateMap<AgreedModuleViewModel, AgreedModule>()
                   .ForPath(x=>x.VendorModule.VendorId, opt => opt.MapFrom(src => src.VendorId));               
+            
             CreateMap<AgreedModule, ModuleViewModel>()
                   .ForMember(nameof(ModuleViewModel.ExistModule), opt => opt.MapFrom(src => System.IO.File.Exists(src.PathVendorModule)))
                   .ForMember(nameof(ModuleViewModel.DateOfLetter), opt => opt.MapFrom(src => src.Letter.DateOfLetter))

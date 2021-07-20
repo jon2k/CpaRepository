@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Web.Mediatr.Command
+namespace Web.Mediatr.Command.VendorModuleController
 {
     public class CreateVendorModuleCommand : IRequest<VendorModule>
     {
@@ -18,18 +18,18 @@ namespace Web.Mediatr.Command
 
             public CreateVendorModuleCommandHandler(IVendorModuleRepo repo)
             {
-                _repo = repo ?? throw new ArgumentNullException(nameof(repo));              
+                _repo = repo ?? throw new ArgumentNullException(nameof(repo));
             }
 
             public async Task<VendorModule> Handle(CreateVendorModuleCommand request, CancellationToken cancellationToken)
             {
                 try
                 {
-                    var cpaModules = _repo.GetAllCpaModules().Where(p =>request.VendorModule.CpaModules.Any(l => p.Id == l.Id)).ToList();
+                    var cpaModules = _repo.GetAllCpaModules().Where(p => request.VendorModule.CpaModules.Any(l => p.Id == l.Id)).ToList();
                     request.VendorModule.CpaModules = cpaModules;
 
                     return await _repo.AddAsync(request.VendorModule);
-                   
+
                 }
                 catch
                 {

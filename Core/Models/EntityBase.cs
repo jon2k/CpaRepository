@@ -6,6 +6,7 @@ namespace Core.Models
     {
         [Key]
         public int Id { get; set; }
+
         [Timestamp]
         public byte[] Timestamp { get; set; }
 

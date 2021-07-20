@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Core.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Web.Mediatr.Command;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Web.Mediatr.Command.AgreedModuleController;
 using Web.Mediatr.Query;
 using Web.Mediatr.Query.AgreedModuleController;
 using Web.Mediatr.Query.LetterController;
@@ -211,6 +211,5 @@ namespace Web.Controllers.Admin
                 return RedirectToAction(nameof(AgreedModules));
             }
         }
-       
     }
 }

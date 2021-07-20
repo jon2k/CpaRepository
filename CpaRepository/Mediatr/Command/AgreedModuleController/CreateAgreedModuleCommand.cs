@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
-namespace Web.Mediatr.Command
+namespace Web.Mediatr.Command.AgreedModuleController
 {
     public class CreateAgreedModuleCommand : IRequest<AgreedModule>
     {
@@ -22,7 +22,7 @@ namespace Web.Mediatr.Command
             private IPathService _pathService;
             private IWebHostEnvironment _appEnvironment;
 
-            public CreateAgreedModuleCommandHandler(IAgreedModulesRepo repo, 
+            public CreateAgreedModuleCommandHandler(IAgreedModulesRepo repo,
                 IFileService fileService, IPathService pathService, IWebHostEnvironment appEnvironment)
             {
                 _repo = repo ?? throw new ArgumentNullException(nameof(repo));

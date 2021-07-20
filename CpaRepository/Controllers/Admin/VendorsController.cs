@@ -12,10 +12,10 @@ namespace Web.Controllers.Admin
     {
         private readonly ILogger<VendorsController> _logger;
         private IRepository<Vendor> _repo;
-        public VendorsController(IRepository<Vendor> context, ILogger<VendorsController> logger)
+        public VendorsController(IRepository<Vendor> repo, ILogger<VendorsController> logger)
         {
-            _repo = context;
-            _logger = logger;
+            _repo = repo ?? throw new ArgumentNullException(nameof(repo));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         public ActionResult Vendor()
         {

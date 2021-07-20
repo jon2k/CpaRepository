@@ -12,10 +12,10 @@ namespace Web.Controllers.Admin
     {
         private readonly ILogger<CpaModulesController> _logger;
         private IRepository<CpaModule> _repo;
-        public CpaModulesController(IRepository<CpaModule> context, ILogger<CpaModulesController> logger)
+        public CpaModulesController(IRepository<CpaModule> repo, ILogger<CpaModulesController> logger)
         {
-            _repo = context;
-            _logger = logger;
+            _repo = repo ?? throw new ArgumentNullException(nameof(repo));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         public ActionResult CpaModule()
         {

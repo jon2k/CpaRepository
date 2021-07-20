@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Core.Interfaces.EF;
 using Core.Interfaces.FileSystem;
 
-namespace Web.Mediatr.Command
+namespace Web.Mediatr.Command.LetterController
 {
     public class DeleteLetterCommand : IRequest<int>
     {

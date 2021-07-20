@@ -5,18 +5,13 @@ namespace Infrastructure.FileSystem
 {
     public class PathService : IPathService
     {
-        //private IWebHostEnvironment _environment;
         public PathService()
         {
-          //  _environment = webHostEnvironment;
         }
         public string GetPathFolderForLetter(string envPath, string nameVendor, DateTime date)
         {
             if (envPath != null && nameVendor!=null )
             {
-                /*return _environment.WebRootPath + "\\Root\\Letters\\"
-                    + nameVendor + "\\"
-                     + date.Date.ToString("dd.MM.yyyy");*/
                 return envPath + "\\Root\\Letters\\"
                    + nameVendor + "\\"
                     + date.Date.ToString("dd.MM.yyyy");

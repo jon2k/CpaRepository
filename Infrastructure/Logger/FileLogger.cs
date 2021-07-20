@@ -6,11 +6,11 @@ namespace Infrastructure.Logger
 {
     public class FileLogger : ILogger
     {
-        private string filePath;
+        private string _filePath;
         private static object _lock = new object();
         public FileLogger(string path)
         {
-            filePath = path;
+            _filePath = path;
         }
         public IDisposable BeginScope<TState>(TState state)
         {
@@ -19,7 +19,6 @@ namespace Infrastructure.Logger
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            //return logLevel == LogLevel.Trace;
             return true;
         }
 
@@ -29,7 +28,7 @@ namespace Infrastructure.Logger
             {
                 lock (_lock)
                 {
-                    File.AppendAllText(filePath, formatter(state, exception) + Environment.NewLine);
+                    File.AppendAllText(_filePath, formatter(state, exception) + Environment.NewLine);
                 }
             }
         }

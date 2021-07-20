@@ -8,7 +8,7 @@ using Core.Interfaces.EF;
 using Core.Interfaces.FileSystem;
 using Core.Models;
 
-namespace Web.Mediatr.Command
+namespace Web.Mediatr.Command.LetterController
 {
     public class CreateLetterCommand : IRequest<Letter>
     {
@@ -41,7 +41,7 @@ namespace Web.Mediatr.Command
 
                     try
                     {
-                        request.Letter.PathLetter = fullPath;            
+                        request.Letter.PathLetter = fullPath;
                         return await _repo.AddAsync(request.Letter);
                     }
                     catch (Exception e)

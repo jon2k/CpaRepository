@@ -62,7 +62,8 @@ namespace Web.Controllers
             try
             {              
                 var agreedModules = await _mediator.Send(new GetModulesQuery() { Filtr=filtr});
-                var vm = _mapper.Map<List<ModuleViewModel>>(agreedModules).OrderByDescending(m => m.DateOfLetter);
+                var vm = _mapper.Map<List<ModuleViewModel>>(agreedModules)
+                    .OrderByDescending(m => m.DateOfLetter);
 
                 return PartialView(vm);
             }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Core.Interfaces.EF;
 using Core.Interfaces.FileSystem;
 
-namespace Web.Mediatr.Command
+namespace Web.Mediatr.Command.AgreedModuleController
 {
     public class DeleteAgreedModuleCommand : IRequest<int>
     {
@@ -18,7 +18,7 @@ namespace Web.Mediatr.Command
             public DeleteAgreedModuleCommandHandler(IAgreedModulesRepo repo, IFileService fileService)
             {
                 _repo = repo;
-                _fileService = fileService;              
+                _fileService = fileService;
             }
 
             public async Task<int> Handle(DeleteAgreedModuleCommand request, CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ namespace Web.Mediatr.Command
                 var module = _repo.GetById(request.Id);
                 _fileService.DeleteFile(module.PathVendorModule);
                 return await _repo.DeleteAsync(module);
-               
+
             }
         }
     }

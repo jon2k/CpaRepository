@@ -9,6 +9,7 @@ namespace Core.Models
         [Display(Name = "Номер письма о согласовании")]
         [Required(ErrorMessage = "Не указан номер письма о согласовании")]
         public string NumberLetter { get; set; }
+
         [Required]
         public string PathLetter { get; set; }
        

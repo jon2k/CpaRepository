@@ -9,7 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
-namespace Web.Mediatr.Command
+namespace Web.Mediatr.Command.AgreedModuleController
 {
     public class EditAgreedModuleCommand : IRequest<AgreedModule>
     {

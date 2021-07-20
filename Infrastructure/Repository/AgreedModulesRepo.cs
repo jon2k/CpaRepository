@@ -47,8 +47,6 @@ namespace Infrastructure.Repository
         {
             return _db.Letters.Find(id);
         }
-
-
     }
 }
 

@@ -1,29 +1,22 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using System.IO;
 using AutoMapper;
-using Web.AutoMapper;
-using MediatR;
-using System.Reflection;
 using Core.Interfaces.EF;
 using Core.Interfaces.FileSystem;
 using Core.Models;
-using Web;
-using Web.Mediatr.Query;
 using Infrastructure.EF;
 using Infrastructure.FileSystem;
 using Infrastructure.Logger;
 using Infrastructure.Repository;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.IO;
+using System.Reflection;
+using Web.AutoMapper;
 using Web.Mediatr.Query.ModulesController;
 using Web.ViewModel.Module;
 
@@ -59,14 +52,9 @@ namespace CpaRepository
                 mc.AddProfile(new MappingProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+            services.AddSingleton(mapper);        
 
-            // services.AddMediatR(Assembly.GetExecutingAssembly());
-            // services.AddMediatR(Assembly.GetExecutingAssembly(), typeof(GetAgreedModulesQuery).GetTypeInfo().Assembly);
-
-
-            services.AddTransient<IRequestHandler<GetActualModulesQuery, ModuleVM>, GetActualModulesQuery.GetActualModulesQueryHandler>();
-            // services.AddTransient<IRequestHandler<GetArchiveModulesQuery, ModuleVM>, GetArchiveModulesQuery.GetArchiveModulesQueryHandler>();
+            services.AddTransient<IRequestHandler<GetActualModulesQuery, ModuleVM>, GetActualModulesQuery.GetActualModulesQueryHandler>();          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

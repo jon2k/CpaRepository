@@ -5,9 +5,12 @@ namespace Core.Models
     public class AgreedModule : EntityBase
     {
         public int VendorModuleId { get; set; }
+
         [Required]
         public virtual VendorModule VendorModule { get; set; }
+
         public int LetterId { get; set; }
+
         public virtual Letter Letter { get; set; }
         
         [Display(Name = "Контрольная сумма")]

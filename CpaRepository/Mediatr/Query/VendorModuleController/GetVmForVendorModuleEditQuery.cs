@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Interfaces.EF;
+using Core.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
@@ -27,11 +28,26 @@ namespace Web.Mediatr.Query.VendorModuleController
 
                 var model = _repo.GetById(request.Id);
                 var modules = _repo.GetAllCpaModules().ToList();
-                var cpaModule = modules.Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.NameModule }).ToList();             
+                var cpaModule = modules.Select(n => new SelectListItem
+                {
+                    Value = n.Id.ToString(),
+                    Text = n.NameModule,
+                    Selected = DefinitionSelectedModule(n, model)
+                }).ToList();
                 var vm = _mapper.Map<VendorModuleViewModel>(model);
                 vm.CpaModulesSelectListItem = cpaModule;
 
                 return vm;
+            }
+            private bool DefinitionSelectedModule(CpaModule cpaModule, VendorModule vendorModule)
+            {
+                foreach (var cpa in vendorModule.CpaModules)
+                {
+                    if (cpaModule.Id == cpa.Id)
+                        return true;
+                }
+
+                return false;
             }
         }
     }
